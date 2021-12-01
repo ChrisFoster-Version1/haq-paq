@@ -7,23 +7,24 @@
 
 //                          Formatting Utilities                            //
 
-// Thomas/Michal miro
+// Thomas/Michal/Carlos miro
 // Format a number with k/M to denote thousand/million
 // decplaces = decimal places | num = number to format
-// .ut.formatNum[0;1213000] 
-.ut.formatNum:{[decplaces;num]
-  dict:(`s#0 4 7!" kM");
+// .format.formatNum[0;1213000] 
+.format.formatNum:{[decplaces;num]
+  dict:(`s#0 4 7 10!" kMB");
   trim ($[decplaces=0;-1_;].Q.f[decplaces;num%10 xexp 3*(c-1)div 3]),dict c:count string floor abs num
  };
 
 // Kyle miro
 // Format a number with commas 
-.ut.commaSepNum:{[num]
+.format.commaSepNum:{[num]
   $[ne;"-",;]$[num=`long$num;;,[;".",last p]]reverse","sv 3 cut reverse first p:"."vs$[ne:num<0;1_;]string num
  };
 
 // Chris tech chat
 // Substitute values into a string, mapping using input dictionary
+// The reason for the desc is to avoid a bug when having keys like `a`u`user where it would try search and replace the $u before $user causing $user never to be replaced
 // msg = string including $key1, $key2,... where $key1, $key2,... are keys of dict | dict = dictionary mapping $key1, key2,... to the atomic values to replace them with
 // msg:"The count is $cnt, the overall value is $val and the user is $u"
 // dict:`cnt`val`u!(10;1500f;`chris)
@@ -42,3 +43,9 @@
   ssr/[msg;s;string list]
  };
 
+// msg:"The count is $cnt, the overall value is $val and the user is $u"
+// dict:`cnt`val`u!(10;1500f;`chris)
+.format.customSSR:{[msg;dict]
+  s:"$",'string k:desc key dict;
+  ssr/[msg;s;string dict k]
+ };

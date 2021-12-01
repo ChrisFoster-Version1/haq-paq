@@ -153,3 +153,62 @@
   (`msg    ; ""  ; 0b ; ` );
   (`part   ; "j" ; 0b ; ` ));
 .tbl.createTbl:{x set exec (kcol where kkey)xkey flip kcol!ktype$\:()from .schema x};
+
+// Chris 
+// Adding an int partition db 
+
+
+// Chris - couldnt check here as no unix setup on my local at the moment
+// Could change it to take a 2nd input for the db path
+// It is also assumed the int partition has a sym file to track what each int represents called intMap
+// tname = the table on disk name - otherwise will duplicate the count but could look into resolving this in a different way
+// For tracking the size of the db partition
+.tbl.getIntDBSize:{[tname]
+  name:"*",tname,"*";
+  res1:system"du | awk '{ print $1\"|\"$2}'";
+  tbl:update name:intMap int from
+        0!select first"J"$num_size by int:"I"$partition inter\: .Q.n from`num_size`partition!/:"|"vs/:res1 where not partition like name,not partition~\:enlist"*";
+  res2:system"ls -la | awk '{ print $5\"|\"$9}'";
+  tbl:tbl,0!select first"J"$num_size by`$name,int:0ni from(update name:name except\:(.Q.n,".")from`num_size`partition!/:"|"vs/:res2)where not name ~\:"";
+  `name`int xkey update total:sum num_size from tbl
+ }
+ 
+// Same as above function but for date partitions
+// TODO - Note no input using a hacky way to 
+// Same thing as the above testing 
+.tbl.getDateDBSize:{[]
+  res1:system"du | awk '{ print $1\"|\"$2}'";
+  tbl:update name:` from 0!select first"J"$num_size by date:"D"$2_/:partition from`num_size`partition!/:"|"vs/:res1 where 1=count each group'[partition]@\:"/";
+  res2:system"ls -la | awk '{ print $5\"|\"$9}'";
+  tbl:tbl,0!select first"J"$num_size by`$name,date:0nd from(update name:name except\:(.Q.n,".")from`num_size`partition!/:"|"vs/:res2)where not name ~\:"";
+  `name`date xkey update total:sum num_size from tbl
+ }
+
+// Phil tech chat
+// Should this be in tables? (uj/)?
+// Example:
+// n:10000 / number of rows
+// tbl:([]c1:n?100f;c2:n?100i;c3:n?100j;c4:n?.z.d;c5:n?.z.t) / create a random table
+// \t:10 tblVersions,:enlist ?[-3;cols tbl]#tbl / from tbl, create 10 different tables of random schema
+// Comparison
+// tblCopies:100?tblVersions / take 100 copies of tblVersion - which will give a list of tables of repeating mixed schemas
+// \ts a:(uj/) tblCopies
+// 257 92799808
+// \ts b:(uj/) .tbl.optimalUnionOver tblCopies 
+// 73 119803712
+// (~) . (cols[a] xasc a;cols[b] xasc b)
+// 1b
+// (uj/) is useful if you have a list of mixed key dictionaries, and you want to convert it to a table. 
+// (uj/) is pretty expensive the bigger the list gets 
+// group all common schemas together first before running uj over
+.tbl.optimalUnionOver:{[tbls]
+  (uj/) raze each tbls group cols each tbls
+ }
+
+// Creating an integer partition db
+// Example: d:`path`pname`tname!(".";`test1;`HistData)
+// d[`pname]:first 1?`9;.tbl.saveAsIntPart[d;([]date:.z.d-til 5;name:5?`3;val:5?5)]
+.tbl.saveAsIntPart:{[d;data] // d=`path`pname`tname!("path";`part name;`table name) | data=table
+  .Q.ens[p:hsym`$d`path;;`intMap]([]id:(),d`pname);
+  hsym[`$d[`path],"/",string[intMap?d`pname],"/",string[d`tname],"/"]set .Q.en[p;data]
+ }
