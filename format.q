@@ -7,7 +7,7 @@
 
 //                          Formatting Utilities                            //
 
-// Thomas/Michal/Carlos miro
+
 // Format a number with k/M to denote thousand/million
 // decplaces = decimal places | num = number to format
 // .format.formatNum[0;1213000] 
@@ -16,13 +16,11 @@
   trim ($[decplaces=0;-1_;].Q.f[decplaces;num%10 xexp 3*(c-1)div 3]),dict c:count string floor abs num
  };
 
-// Kyle miro
 // Format a number with commas 
 .format.commaSepNum:{[num]
   $[ne;"-",;]$[num=`long$num;;,[;".",last p]]reverse","sv 3 cut reverse first p:"."vs$[ne:num<0;1_;]string num
  };
 
-// Chris tech chat
 // Substitute values into a string, mapping using input dictionary
 // The reason for the desc is to avoid a bug when having keys like `a`u`user where it would try search and replace the $u before $user causing $user never to be replaced
 // msg = string including $key1, $key2,... where $key1, $key2,... are keys of dict | dict = dictionary mapping $key1, key2,... to the atomic values to replace them with
@@ -33,7 +31,6 @@
   ssr/[msg;s;string dict k]
  };
 
-// Chris tech chat
 // Substitute values into a string, mapping using the order of input list
 // msg = string including $0, $1,... values to be replaced | list = atomic values to replace $0, $1,... with
 // msg:"The count is $0, the overall value is $1 and the user is $2"

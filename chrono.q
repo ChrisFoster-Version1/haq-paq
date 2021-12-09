@@ -8,7 +8,6 @@
 //                          Chrono Utilities                                //
 
 
-// Chris miro
 // Takes a date as input and returns the date at the start of the month
 .chrono.getMonthStart:{[date]
   `date$`month$date
@@ -39,7 +38,6 @@
   "D"$string[`year$date],".12.31"
  };
 
-// Chris miro
 // Return a list of non saturday/sunday dates
 // Takes the number of dates one wants dates for
 .chrono.getWeekDays:{[num]
@@ -48,7 +46,6 @@
  };
 
 
-// Thomas miro
 // Convert between kdb timestamp and millisecond-based Unix timestamp
 .chrono.toQ:{[milliseconds]
   1970.01.01+0D00:00:00.001*milliseconds
@@ -58,14 +55,12 @@
   "j"$(timestamp-1970.01.01D0)%0D00:00:00.001
  };
 
-// Kyle miro
 // Modifying date format
 // example .chrono.formatDate[`m`y`d;.z.d;"-"]
 .chrono.formatDate:{[format;date;delim]
   delim sv string (`d`m`y!`dd`mm`year)[format]$date
  };
 
-// Chris Miro
 // takes a date and returns the date of the most recent weekday
 .chrono.findLastWeekday:{[date]
   $[any 0 1 = date mod 7;.z.s[date-1];date]

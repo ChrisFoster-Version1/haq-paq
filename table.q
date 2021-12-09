@@ -8,24 +8,20 @@
 //                          Table Utilities                                 //
 
 
-// Sam in tech chat
 // Takes a table or sym as input
 .tbl.resolve:{[tblOrSym]
   $[-11h=tyoe tblOrSym;value;]tblOrSym
  };
  
-// Sam in tech chat
 // Takes a table or sym as input
 .tbl.denum:{[tblOrSym]
   enumCols:where (type each flip res:0!.tbl.resolve tblOrSym)within 20 76h;
   keys[tblOrSym]xkey ![res;();0b;enumCols!value ,/:enumCols]
  };
 
-// Thomas miro
 // similar to above
 // .tbl.denumerate:{keys[x]xkey@[0!x;where type'[flip 0!x]within 20 76h;get]}  
 
-// Chris / Kyle 
 // Pivot table creation dynamic
 // t=table | g = group column (row in pivot) | c=column to be the column | v= column to be the values between g+c
 // example tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f) | .tbl.createPivot[tbl;`cl;`n;`f]
@@ -40,8 +36,7 @@
 .tbl.createMultiPivot:{[t;g;c;vl]
   raze{[t;g;c;v](`ky,g) xkey update ky:v from .tbl.createPivot[t;g;c;v]}[t;g;c]each vl
  };
- 
-// Chris
+
 // Convert from a pivot table to a normal kdb table
 // t=pivot table | g = group column (row in pivot) | c=column to be the column | v= column to be the values between g+c
 //example tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f) 
@@ -53,7 +48,6 @@
   flip (g;c;v)!raze each(count[cls]#enlist ?[t;();();g];count[t]#/:cls;t cls)
  };
 
-// Chris miro
 // Create a link between a table of data and x other tables
 // Example: Order:([uuid:10?`5];id:10?`vod`ms`fd`orc;qty:10?50)
 //          Product:([id:`vod`ms`fd];dsc:`$("VOD";"Morgan";"First Deriv"))
@@ -61,7 +55,6 @@
 //          .tbl.llink[Order;`Product`Market]
 .tbl.llink:{x lj k xkey?[y;();0b;](k,lower y)!(k:keys y),enlist(!;enlist y;`i)}/
 
-// Chris miro
 // Relinking data to a table which has a link and the static (ish) table has been updated
 // Input : data= the update of the link reference table
 //         gt=global table (Order)
@@ -73,7 +66,6 @@
   gt upsert .tbl.llink[tbl;lt]
  }
 
-// Matt miro
 // Compare 2 tables for a specific check
 // tab1 = table | tab2 = table | check = symbol describing a check like `count
 .tbl.tabCompare:{[tab1;tab2;check]
@@ -82,7 +74,6 @@
   if[check~`subset;:0=count tab2 except tab1]
  };
 
-// Kyle miro
 // Haven't dealt with this situation before so I'm not sure what the appropriate setup is. 
 // This function assumes that any column-values missing have been cut off from the end of the column files. 
 // Then, it resaves down the table, with all columns truncated to the length of the shortest one.
@@ -92,7 +83,6 @@
   (hsym  `$string[dir],"/") set flip cols[dir]!m#/:c
  };
 
-// Kyle miro
 // outputs csv as table of strings, without dev counting number of columns
 // file = CSV file handle
 .tbl.loadCsvWithStrings:{[file]n:1+sum ","=first c:read0 file;(n#"*";enlist",")0:c};
@@ -107,12 +97,10 @@
 // 2021.11.12D01:02,GOOG,102,102,50
 .tbl.loadCsvWithSchema:{[file;tab](upper (0!meta tab)`t;enlist",")0:file};
 
-// Chris miro
 // See example in .tbl.llink
 // .tbl.isLinked`Market
 .tbl.isLinked:{where tables[]!{x in fkeys y}[x]each tables`}
 
-// Chris 
 // Example tables for the comparisons
 //tbl1:([]id:`k`h`j`l`j`p;qty:10 40 40 30 15 0);
 //tbl2:([]id:`k`h`j`l`j;qty:10 10 40 30 90);
@@ -138,13 +126,11 @@
 .tbl.compExcept:.tbl.comparison[except];
 .tbl.compInter:.tbl.comparison[inter];
 
-// Kyle tech chat
 // x=dictionary to rename cols
 // y=table 
 // example : .tbl.rnc[`sym`src!`SYM`SRC;([]time:3#.z.p;sym:3#`AAPL;src:3#`CITI)]
 .tbl.rnc:{{y^x y}[x;cols y] xcol y}
 
-// Chris
 // Set a schema in q like so then a function to create it (didnt add the attr but not hard to do)
 .schema.Alert:`kcol`ktype`kkey`kattr!/:
  ((`id     ; "s" ; 0b ; ` );
@@ -154,11 +140,9 @@
   (`part   ; "j" ; 0b ; ` ));
 .tbl.createTbl:{x set exec (kcol where kkey)xkey flip kcol!ktype$\:()from .schema x};
 
-// Chris 
 // Adding an int partition db 
 
 
-// Chris - couldnt check here as no unix setup on my local at the moment
 // Could change it to take a 2nd input for the db path
 // It is also assumed the int partition has a sym file to track what each int represents called intMap
 // tname = the table on disk name - otherwise will duplicate the count but could look into resolving this in a different way
@@ -184,7 +168,6 @@
   `name`date xkey update total:sum num_size from tbl
  }
 
-// Phil tech chat
 // Should this be in tables? (uj/)?
 // Example:
 // n:10000 / number of rows

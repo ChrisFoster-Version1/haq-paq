@@ -8,7 +8,6 @@
 //                          Benchmark Utilities                             //
 
 
-// Chris / Kyle miro
 // Logging the stats of a functions runetime
 // func = function name | args = function input(s) as a list
 .bench.logBench:{[func;args] //`BenchRunTime insert
@@ -19,7 +18,6 @@
 // For tracking each line in a function that was set
 .bench.BenchEachStep:flip`fn`section`time!"sst"$\:();
 
-// Chris miro
 // Basic upsert which takes a function name(fn) and a section in the function(symbol name) as inputs
 .bench.logStep:{[fn;sect]
   `.bench.BenchEachStep upsert (fn;sect;.z.t)
