@@ -23,7 +23,9 @@
   `.bench.BenchEachStep upsert (fn;sect;.z.t)
  }
 
-.bench.returnTimeStep:{[fn1;sect1]update diff:-':[first time;time] from select from .bench.BenchEachStep where fn=fn1,sect=sect1}
+.bench.returnTimeStep:{[fn1;sect1]
+  update diff:-':[first time;time] from select from .bench.BenchEachStep where fn=fn1,sect=sect1
+ }
 
 // Example function
 .bench.testQuery:{[]
