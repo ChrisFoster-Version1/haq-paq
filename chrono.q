@@ -47,7 +47,7 @@
 
 
 // Convert between kdb timestamp and millisecond-based Unix timestamp
-.chrono.toQ:{[milliseconds]
+.chrono.unixToQ:{[milliseconds]
   1970.01.01+0D00:00:00.001*milliseconds
  };
 // Vice versa of the above 
