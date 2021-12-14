@@ -51,7 +51,7 @@
   1970.01.01+0D00:00:00.001*milliseconds
  };
 // Vice versa of the above 
-.chrono.toUnix:{[timestamp]
+.chrono.qToUnix:{[timestamp]
   "j"$(timestamp-1970.01.01D0)%0D00:00:00.001
  };
 
