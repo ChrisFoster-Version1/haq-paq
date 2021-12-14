@@ -16,10 +16,10 @@
 // Basic loggers
 // Could add a true/false flag to stop updating into the table for errors
 .log.Error:flip`time`message!"ps"$\:()
-.log.info:{[msg]
+.log.publishInfo:{[msg]
   1 "INFO ",.log.getMemStats[]," ",msg;
  };
  
-.log.error:{[msg]
-  2 "INFO ",.log.getMemStats[]," ",msg;`.log.Error upsert (.z.p;`$msg)
+.log.publishError:{[msg]
+  2 "ERROR ",.log.getMemStats[]," ",msg;`.log.Error upsert (.z.p;`$msg)
  };
