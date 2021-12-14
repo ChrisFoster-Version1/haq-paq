@@ -21,11 +21,11 @@
 // Basic upsert which takes a function name(fn) and a section in the function(symbol name) as inputs
 .bench.logStep:{[fn;sect]
   `.bench.BenchEachStep upsert (fn;sect;.z.t)
- }
+ };
 
 .bench.returnTimeStep:{[fn1;sect1]
   update diff:-':[first time;time] from select from .bench.BenchEachStep where fn=fn1,sect=sect1
- }
+ };
 
 // Example function
 .bench.testQuery:{[]
@@ -39,4 +39,4 @@
   f`listCreation2;
   k:8;
   f`done
- }
+ };
