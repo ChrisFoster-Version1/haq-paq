@@ -18,7 +18,9 @@
 
 // Format a number with commas 
 .format.commaSepNum:{[num]
-  $[ne;"-",;]$[num=`long$num;;,[;".",last p]]reverse","sv 3 cut reverse first p:"."vs$[ne:num<0;1_;]string num
+  $[ne;"-",;]
+     $[num=`long$num;;,[;".",last p]]
+       reverse","sv 3 cut reverse first p:"."vs$[ne:num<0;1_;]string num
  };
 
 // Substitute values into a string, mapping using input dictionary
@@ -38,11 +40,4 @@
 .format.customSSRByOrder:{[msg;list]
   s:"$",'string til count list;
   ssr/[msg;s;string list]
- };
-
-// msg:"The count is $cnt, the overall value is $val and the user is $u"
-// dict:`cnt`val`u!(10;1500f;`chris)
-.format.customSSR:{[msg;dict]
-  s:"$",'string k:desc key dict;
-  ssr/[msg;s;string dict k]
  };

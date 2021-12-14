@@ -62,6 +62,6 @@
  };
 
 // takes a date and returns the date of the most recent weekday
-.chrono.findLastWeekday:{[date]
+.chrono.getLastWeekday:{[date]
   $[any 0 1 = date mod 7;.z.s[date-1];date]
  };
