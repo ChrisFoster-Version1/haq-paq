@@ -10,7 +10,10 @@
 
 // Takes a table or sym as input
 .tbl.resolve:{[tblOrSym]
-  $[-11h=tyoe tblOrSym;value;]tblOrSym
+  $[-11h=type tblOrSym;
+    value tblOrSym;
+    tblOrSym
+   ]
  };
  
 // Takes a table or sym as input

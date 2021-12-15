@@ -9,7 +9,7 @@
 
 
 // Setting up a dictionary without a specified type
-.ut.agnostic:{[dict]
+.ut.makeDictGenType:{[dict]
   (enlist[`]!enlist(::)),dict
  }
 

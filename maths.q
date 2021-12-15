@@ -22,8 +22,11 @@
  };
 
 // Greatest common divisor of 2 integers
-.mathss.gcd:{[num1;num2]
-  $[num2=0;abs num1;.z.s[num2;num1 mod num2]]
+.maths.gcd:{[num1;num2]
+  $[num2=0;
+    abs num1;
+    .z.s[num2;num1 mod num2]
+   ]
  };
 
 // Lowest common multiple of 2 integers
@@ -61,7 +64,9 @@
  };
 
 // Return the mode of a list
-.maths.findListMode:{[list]where max[c]=c:count each group x};
+.maths.findListMode:{[list]
+  where max[c]=c:count each group x
+ };
 
 // Truncating (round towards 0) num to decplaces decimal places
 // decplaces = number of decimals | num = number to be truncated
@@ -69,21 +74,23 @@
 .maths.truncate:{[decplaces;num]
   $[decplaces=0;
     $[num<0;ceiling;floor]num;
-	$[num<0;-1;1]*%[;dv] floor abs num*dv:10 xexp decplaces
-  ]
+    $[num<0;-1;1]*%[;dv] floor abs num*dv:10 xexp decplaces
+   ]
  };
 
 // Return the factorial of a non-negative integer, num
-.maths.factorial:{[num]prd 1+til num};
+.maths.factorial:{[num]
+  prd 1+til num
+ };
 
 // Return the num-th prime number
 .maths.nthPrime:{[num] 
   $[num>5;
     [list:2_til ceiling num*log[num]+log log num;
-	  {x except 1_x where 0=x mod x y}/[list;til ceiling sqrt num]num-1
-	];
-	1 2 3 5 7 11 num
-  ]
+     {x except 1_x where 0=x mod x y}/[list;til ceiling sqrt num]num-1
+    ];
+    1 2 3 5 7 11 num
+   ]
  };
 
 // Return all prime numbers less than num
