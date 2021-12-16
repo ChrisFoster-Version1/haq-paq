@@ -63,5 +63,5 @@
 
 // takes a date and returns the date of the most recent weekday
 .chrono.getLastWeekday:{[date]
-  $[any 0 1 = date mod 7;.z.s[date-1];date]
+  date-m*3>m:1+date mod 7
  };
