@@ -192,9 +192,14 @@
  }
 
 // Creating an integer partition db
+// Inputs: - path  - directory path
+//         - pname - partition name 
+//         - tname - table name
+//         - data  - table to save to disk
 // Example: d:`path`pname`tname!(".";`test1;`HistData)
-// d[`pname]:first 1?`9;.tbl.saveAsIntPart[d;([]date:.z.d-til 5;name:5?`3;val:5?5)]
-.tbl.saveAsIntPart:{[d;data] // d=`path`pname`tname!("path";`part name;`table name) | data=table
-  .Q.ens[p:hsym`$d`path;;`intMap]([]id:(),d`pname);
-  hsym[`$d[`path],"/",string[intMap?d`pname],"/",string[d`tname],"/"]set .Q.en[p;data]
+// d=`path`pname`tname!("path";`part name;`table name) | data=table
+// d[`pname]:first 1?`9;.tbl.saveAsIntPart[d`path;d`pname;d`tname;([]date:.z.d-til 5;name:5?`3;val:5?5)]
+.tbl.saveAsIntPart:{[path;pname;tname;data] 
+  .Q.ens[p:hsym`$path;;`intMap]([]id:(),pname);
+  hsym[`$path,"/",string[intMap?pname],"/",string[tname],"/"]set .Q.en[p;data]
  }
