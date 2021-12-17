@@ -85,13 +85,17 @@
 
 // Return the num-th prime number
 .maths.nthPrime:{[num] 
-  $[num>5;
-    [list:2_til ceiling num*log[num]+log log num;
-     {x except 1_x where 0=x mod x y}/[list;til ceiling sqrt num]num-1
-    ];
-    1 2 3 5 7 11 num
-   ]
+  if[num>5;
+    :.maths.returnXPrime[num]num-1
+  ];
+  1 2 3 5 7 11 num
  };
+
+// Returns list of prime numbers to some number x
+.maths.returnXPrime:{[num]
+  list:2_til ceiling num*log[num]+log log num;
+  num sublist {x except 1_x where 0=x mod x y}/[list;til ceiling sqrt num]
+ }
 
 // Return all prime numbers less than num
 .maths.listPrimes:{[num]
