@@ -56,9 +56,12 @@
  };
 
 // Modifying date format
+// y returns 2001 while y2 returns 01
 // example .chrono.formatDate[`m`y`d;.z.d;"-"]
 .chrono.formatDate:{[format;date;delim]
-  delim sv string (`d`m`y!`dd`mm`year)[format]$date
+  d:"0"^-2$k!string(`d`m!`dd`mm)[k:format except`y`y2]$date;
+  d:d,(format inter`y`y2)!enlist $[`y2 in format;{-2$string x};string]`year$date;
+  delim sv d format
  };
 
 // takes a date and returns the date of the most recent weekday
