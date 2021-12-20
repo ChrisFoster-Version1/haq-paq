@@ -67,7 +67,7 @@
   ky:keys data;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key data);
   gt upsert .tbl.llink[tbl;lt]
- }
+ };
 
 // Compare 2 tables for a specific check
 // tab1 = table | tab2 = table | check = symbol describing a check like `count
@@ -83,12 +83,15 @@
 // dir = splayed table file handle 
 .tbl.fixSplayCnt:{[dir]
   m:min count each c:get each `$(string[dir],"/"),/:string cols dir;
-  (hsym  `$string[dir],"/") set flip cols[dir]!m#/:c
+  (hsym `$string[dir],"/") set flip cols[dir]!m#/:c
  };
 
 // outputs csv as table of strings, without dev counting number of columns
 // file = CSV file handle
-.tbl.loadCsvWithStrings:{[file]n:1+sum ","=first c:read0 file;(n#"*";enlist",")0:c};
+.tbl.loadCsvWithStrings:{[file]
+  n:1+sum ","=first c:read0 file;
+  (n#"*";enlist",")0:c
+ };
 
 // outputs csv as table of types matching an input schema
 // file = CSV file handle | tab = table or table name
@@ -98,7 +101,9 @@
 // time,sym,bid,ask,size
 // 2021.10.10D01:00,AAPL,27,27.1,100
 // 2021.11.12D01:02,GOOG,102,102,50
-.tbl.loadCsvWithSchema:{[file;tab](upper (0!meta tab)`t;enlist",")0:file};
+.tbl.loadCsvWithSchema:{[file;tab]
+  (upper (0!meta tab)`t;enlist",")0:file
+ };
 
 // See example in .tbl.llink
 // .tbl.isLinked`Market
@@ -109,30 +114,35 @@
 //tbl2:([]id:`k`h`j`l`j;qty:10 10 40 30 90);
 //tk1:([id:`p`m`n];qty:5 10 15);
 //tk2:([id:`o`p`m];qty:10 7 10);
-// 
-.tbl.isKeyed:{[t]not keys[t]~`symbol$()};
+
+.tbl.isKeyed:{[tab]
+  not keys[tab]~`symbol$()
+ };
 .tbl.comparison:{[f;t1;t2]
   b1:.tbl.isKeyed t1;
   b2:.tbl.isKeyed t2; 
   cls:$[b1 and b2;
     keys[t1]inter keys t2;
 	b1;
-	keys[t1]inter cols t2;
+	  keys[t1]inter cols t2;
 	b2;
     cols[t1]inter keys t2;
-    cols[t1]inter cols t2
-   ];
+  cols[t1]inter cols t2
+  ];
   (f). ?[;();0b;cls!cls]each(t1;t2)
  };
+
 // Runs a comparison between 2 tables for the columns in those tables
 // If the table is keyed will only consider the keyed columns 
 .tbl.compExcept:.tbl.comparison[except];
 .tbl.compInter:.tbl.comparison[inter];
 
-// x=dictionary to rename cols
-// y=table 
-// example : .tbl.rnc[`sym`src!`SYM`SRC;([]time:3#.z.p;sym:3#`AAPL;src:3#`CITI)]
-.tbl.rnc:{{y^x y}[x;cols y] xcol y}
+// dict=dictionary to rename cols
+// tab=table 
+// example : .tbl.renameColumns[`sym`src!`SYM`SRC;([]time:3#.z.p;sym:3#`AAPL;src:3#`CITI)]
+.tbl.renameColumns:{[dict;tab]
+  {y^x y}[dict;cols tab] xcol tab
+ };
 
 // Set a schema in q like so then a function to create it (didnt add the attr but not hard to do)
 .schema.Alert:`kcol`ktype`kkey`kattr!/:
@@ -158,7 +168,7 @@
   res2:system"ls -la | awk '{ print $5\"|\"$9}'";
   tbl:tbl,0!select first"J"$num_size by`$name,int:0ni from(update name:name except\:(.Q.n,".")from`num_size`partition!/:"|"vs/:res2)where not name ~\:"";
   `name`int xkey update total:sum num_size from tbl
- }
+ };
  
 // Same as above function but for date partitions
 // TODO - Note no input using a hacky way to 
@@ -169,7 +179,7 @@
   res2:system"ls -la | awk '{ print $5\"|\"$9}'";
   tbl:tbl,0!select first"J"$num_size by`$name,date:0nd from(update name:name except\:(.Q.n,".")from`num_size`partition!/:"|"vs/:res2)where not name ~\:"";
   `name`date xkey update total:sum num_size from tbl
- }
+ };
 
 // Should this be in tables? (uj/)?
 // Example:
@@ -187,9 +197,9 @@
 // (uj/) is useful if you have a list of mixed key dictionaries, and you want to convert it to a table. 
 // (uj/) is pretty expensive the bigger the list gets 
 // group all common schemas together first before running uj over
-.tbl.optimalUnionOver:{[tbls]
-  (uj/) raze each tbls group cols each tbls
- }
+.tbl.optimalUnionOver:{[tabs]
+  (uj/) raze each tbls group cols each tabs
+ };
 
 // Creating an integer partition db
 // Inputs: - path  - directory path
@@ -199,7 +209,7 @@
 // Example: d:`path`pname`tname!(".";`test1;`HistData)
 // d=`path`pname`tname!("path";`part name;`table name) | data=table
 // d[`pname]:first 1?`9;.tbl.saveAsIntPart[d`path;d`pname;d`tname;([]date:.z.d-til 5;name:5?`3;val:5?5)]
-.tbl.saveAsIntPart:{[path;pname;tname;data] 
+.tbl.saveAsIntPart:{[path;pname;tname;data]
   .Q.ens[p:hsym`$path;;`intMap]([]id:(),pname);
   hsym[`$path,"/",string[intMap?pname],"/",string[tname],"/"]set .Q.en[p;data]
- }
+ };
