@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------------//
-//                          Version1 General Utilities                      //
+//                          Version 1 General Utilities                     //
 //--------------------------------------------------------------------------//
 
 
 //////////////////////////////////////////////////////////////////////////////
 
-//                          mathsematics Utilities                           //
+//                          Mathematics Utilities                           //
 
 
 // Return average number of entries per date where records for date exist
