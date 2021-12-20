@@ -41,7 +41,7 @@
 // Return a list of non saturday/sunday dates
 // Takes the number of dates one wants dates for
 .chrono.getWeekDays:{[num]
-  l:.z.d - til ((7 * num div 5) + num mod 5);
+  l:.z.d-til 7*1+num div 5;
   num sublist l where not(l mod 7)in 0 1
  };
 
