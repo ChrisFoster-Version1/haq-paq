@@ -101,3 +101,12 @@
 .maths.listPrimes:{[num]
   {x except 1_x where 0=x mod x y}/[2_til num;til num]
  };
+
+// Replicate pandas.DataFrame to some degree
+// r=list of rows,c=list of cols,df = pivot table in kdb or ` (to return empty pivot table)
+.maths.createPandasDF:{[r;c;df]
+  v:enlist count[r]#0f;
+  pvt:1!flip(`index,c)!enlist[r],count[c]#v;
+  if[df~`;:pvt];
+  pvt upsert df
+ };
