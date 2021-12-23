@@ -45,11 +45,12 @@
   num sublist l where not(l mod 7)in 0 1
  };
 
-
 // Convert between kdb timestamp and millisecond-based Unix timestamp
-.chrono.unixToQ:{[milliseconds]
-  1970.01.01+0D00:00:00.001*milliseconds
+.chrono.unixToQ:{[milliseconds;isTimestamp]
+  res:1970.01.01+0D00:00:00.001*milliseconds;
+  $[isTimestamp;"t"$res;res]
  };
+
 // Vice versa of the above 
 .chrono.qToUnix:{[timestamp]
   "j"$(timestamp-1970.01.01D0)%0D00:00:00.001
