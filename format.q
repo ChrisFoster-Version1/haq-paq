@@ -17,10 +17,12 @@
  };
 
 // Format a number with commas 
-.format.commaSepNum:{[num]
-  $[ne;"-",;]
-     $[num=`long$num;;,[;".",last p]]
-       reverse","sv 3 cut reverse first p:"."vs$[ne:num<0;1_;]string num
+// Inputs: num is some number to format
+//         incDec - whether to include the decimal value like 2.35 or just 2
+.format.commaSepNum:{[num;incDec]
+  res:reverse","sv 3 cut reverse $[ne:num<0;1_;]string`long$num;
+  if[incDec;res:res,".",last "."vs string num];
+  $[ne;"-",;]res     
  };
 
 // Substitute values into a string, mapping using input dictionary
