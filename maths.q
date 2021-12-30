@@ -37,7 +37,7 @@
 // Round num to decplaces decimal place
 // example .maths.round[2;10.4534545]
 .maths.round:{[decplaces;num]
-  %[;dv]`long$decplaces*dv:10 xexp num
+  %[;dv]`long$num*dv:10 xexp decplaces
  };
 
 // Replicate Python functionality for linspace
