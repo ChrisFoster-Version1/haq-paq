@@ -65,7 +65,7 @@
 
 // Return the mode of a list
 .maths.findListMode:{[list]
-  where max[c]=c:count each group x
+  where max[c]=c:count each group list
  };
 
 // Truncating (round towards 0) num to decplaces decimal places
