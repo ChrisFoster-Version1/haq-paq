@@ -9,14 +9,14 @@
 
 
 // Return average number of entries per date where records for date exist
-// Scenario we have a table returned with 30 days we are grouping the data by symbol,side 
-// We then want the 5day average count / 10 day averge count / etc 
+// Scenario we have a table returned with 30 days we are grouping the data by symbol,side
+// We then want the 5day average count / 10 day averge count / etc
 // This function allows us to specify how many days average we want in a table with x days where the input (y) is y<=x
 // ttt:([]date:100?.z.d-1+til 12;syms:100?`ms`orc`gn`fd`jp`vod;nm:100?10)
 // select count[date]%count distinct date,avg3:.maths.avgCntForXDays[date;3] by syms from ttt
 // vs
 // select count[date]%count distinct date by syms from ttt where date in .z.d-til 3
-// datecol = date column | num = number of days before today to consider 
+// datecol = date column | num = number of days before today to consider
 .maths.avgCntForXDays:{[datecol;num]
   count[l]%count distinct l:datecol inter .z.d-til num
  };
@@ -50,7 +50,7 @@
 // Output includes stop
 .maths.linspaceWithY:{[start;stop;num]
   start+til[num]*(stop-start)%num-1
- }; 
+ };
 
 // Return the discriminant of ax^2 + bx + c
 .maths.getDiscriminant:{[a;b;c]
@@ -84,7 +84,7 @@
  };
 
 // Return the num-th prime number
-.maths.nthPrime:{[num] 
+.maths.nthPrime:{[num]
   if[num>5;
     :.maths.returnXPrime[num]num-1
   ];

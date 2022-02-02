@@ -10,19 +10,19 @@
 
 // Format a number with k/M to denote thousand/million
 // decplaces = decimal places | num = number to format
-// .format.formatNum[0;1213000] 
+// .format.formatNum[0;1213000]
 .format.formatNum:{[decplaces;num]
   dict:(`s#0 4 7 10!" kMB");
   trim ($[decplaces=0;-1_;].Q.f[decplaces;num%10 xexp 3*(c-1)div 3]),dict c:count string floor abs num
  };
 
-// Format a number with commas 
+// Format a number with commas
 // Inputs: num is some number to format
 //         incDec - whether to include the decimal value like 2.35 or just 2
 .format.commaSepNum:{[num;incDec]
   res:reverse","sv 3 cut reverse $[ne:num<0;1_;]string`long$num;
   if[incDec;res:res,".",last "."vs string num];
-  $[ne;"-",;]res     
+  $[ne;"-",;]res
  };
 
 // Substitute values into a string, mapping using input dictionary

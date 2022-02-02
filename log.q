@@ -19,7 +19,7 @@
 .log.publishInfo:{[msg]
   1 "INFO ",.log.getMemStats[]," ",msg;
  };
- 
+
 .log.publishError:{[msg]
   2 "ERROR ",.log.getMemStats[]," ",msg;`.log.Error upsert (.z.p;`$msg)
  };

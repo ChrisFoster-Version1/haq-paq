@@ -15,7 +15,7 @@
     tblOrSym
    ]
  };
- 
+
 // Takes a table or sym as input
 .tbl.denum:{[tblOrSym]
   enumCols:where (type each flip res:0!.tbl.resolve tblOrSym)within 20 76h;
@@ -23,7 +23,7 @@
  };
 
 // similar to above
-// .tbl.denumerate:{keys[x]xkey@[0!x;where type'[flip 0!x]within 20 76h;get]}  
+// .tbl.denumerate:{keys[x]xkey@[0!x;where type'[flip 0!x]within 20 76h;get]}
 
 // Pivot table creation dynamic
 // t=table | g = group column (row in pivot) | c=column to be the column | v= column to be the values between g+c
@@ -42,9 +42,9 @@
 
 // Convert from a pivot table to a normal kdb table
 // t=pivot table | g = group column (row in pivot) | c=column to be the column | v= column to be the values between g+c
-//example tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f) 
+//example tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f)
 //        res:.tbl.createPivot[tbl;`cl;`n;`f]
-//        .tbl.convertFromPivot[res;`cl;`n;`f] 
+//        .tbl.convertFromPivot[res;`cl;`n;`f]
 // technically should remove nulls too
 .tbl.convertFromPivot:{[t;g;c;v]
   cls:cols[t]except g;
@@ -61,8 +61,8 @@
 // Relinking data to a table which has a link and the static (ish) table has been updated
 // Input : data= the update of the link reference table
 //         gt=global table (Order)
-//         lt=linked table (Market) 
-// example upsert an orc row in data for llink reference then 
+//         lt=linked table (Market)
+// example upsert an orc row in data for llink reference then
 .tbl.relink:{[data;gt;lt]
   ky:keys data;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key data);
@@ -77,10 +77,10 @@
   if[check~`subset;:0=count tab2 except tab1]
  };
 
-// Haven't dealt with this situation before so I'm not sure what the appropriate setup is. 
-// This function assumes that any column-values missing have been cut off from the end of the column files. 
+// Haven't dealt with this situation before so I'm not sure what the appropriate setup is.
+// This function assumes that any column-values missing have been cut off from the end of the column files.
 // Then, it resaves down the table, with all columns truncated to the length of the shortest one.
-// dir = splayed table file handle 
+// dir = splayed table file handle
 .tbl.fixSplayCnt:{[dir]
   m:min count each c:get each `$(string[dir],"/"),/:string cols dir;
   (hsym `$string[dir],"/") set flip cols[dir]!m#/:c
@@ -120,7 +120,7 @@
  };
 .tbl.comparison:{[f;t1;t2]
   b1:.tbl.isKeyed t1;
-  b2:.tbl.isKeyed t2; 
+  b2:.tbl.isKeyed t2;
   cls:$[b1 and b2;
     keys[t1]inter keys t2;
 	b1;
@@ -133,12 +133,12 @@
  };
 
 // Runs a comparison between 2 tables for the columns in those tables
-// If the table is keyed will only consider the keyed columns 
+// If the table is keyed will only consider the keyed columns
 .tbl.compExcept:.tbl.comparison[except];
 .tbl.compInter:.tbl.comparison[inter];
 
 // dict=dictionary to rename cols
-// tab=table 
+// tab=table
 // example : .tbl.renameColumns[`sym`src!`SYM`SRC;([]time:3#.z.p;sym:3#`AAPL;src:3#`CITI)]
 .tbl.renameColumns:{[dict;tab]
   {y^x y}[dict;cols tab] xcol tab
@@ -153,7 +153,7 @@
   (`part   ; "j" ; 0b ; ` ));
 .tbl.createTbl:{x set exec (kcol where kkey)xkey flip kcol!ktype$\:()from .schema x};
 
-// Adding an int partition db 
+// Adding an int partition db
 
 
 // Could change it to take a 2nd input for the db path
@@ -169,10 +169,10 @@
   tbl:tbl,0!select first"J"$num_size by`$name,int:0ni from(update name:name except\:(.Q.n,".")from`num_size`partition!/:"|"vs/:res2)where not name ~\:"";
   `name`int xkey update total:sum num_size from tbl
  };
- 
+
 // Same as above function but for date partitions
-// TODO - Note no input using a hacky way to 
-// Same thing as the above testing 
+// TODO - Note no input using a hacky way to
+// Same thing as the above testing
 .tbl.getDateDBSize:{[]
   res1:system"du | awk '{ print $1\"|\"$2}'";
   tbl:update name:` from 0!select first"J"$num_size by date:"D"$2_/:partition from`num_size`partition!/:"|"vs/:res1 where 1=count each group'[partition]@\:"/";
@@ -190,12 +190,12 @@
 // tblCopies:100?tblVersions / take 100 copies of tblVersion - which will give a list of tables of repeating mixed schemas
 // \ts a:(uj/) tblCopies
 // 257 92799808
-// \ts b:(uj/) .tbl.optimalUnionOver tblCopies 
+// \ts b:(uj/) .tbl.optimalUnionOver tblCopies
 // 73 119803712
 // (~) . (cols[a] xasc a;cols[b] xasc b)
 // 1b
-// (uj/) is useful if you have a list of mixed key dictionaries, and you want to convert it to a table. 
-// (uj/) is pretty expensive the bigger the list gets 
+// (uj/) is useful if you have a list of mixed key dictionaries, and you want to convert it to a table.
+// (uj/) is pretty expensive the bigger the list gets
 // group all common schemas together first before running uj over
 .tbl.optimalUnionOver:{[tabs]
   (uj/) raze each tbls group cols each tabs
@@ -203,7 +203,7 @@
 
 // Creating an integer partition db
 // Inputs: - path  - directory path
-//         - pname - partition name 
+//         - pname - partition name
 //         - tname - table name
 //         - data  - table to save to disk
 // Example: d:`path`pname`tname!(".";`test1;`HistData)
