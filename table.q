@@ -119,16 +119,9 @@
   not keys[tab]~`symbol$()
  };
 .tbl.comparison:{[f;t1;t2]
-  b1:.tbl.isKeyed t1;
-  b2:.tbl.isKeyed t2;
-  cls:$[b1 and b2;
-    keys[t1]inter keys t2;
-    b1;
-      keys[t1]inter cols t2;
-    b2;
-    cols[t1]inter keys t2;
-  cols[t1]inter cols t2
-  ];
+  b1:$[.tbl.isKeyed t1;keys;cols] t1;
+  b2:$[.tbl.isKeyed t2;keys;cols] t2;
+  cls:b1 inter b2;
   (f). ?[;();0b;cls!cls]each(t1;t2)
  };
 
