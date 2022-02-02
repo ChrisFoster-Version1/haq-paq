@@ -123,9 +123,9 @@
   b2:.tbl.isKeyed t2;
   cls:$[b1 and b2;
     keys[t1]inter keys t2;
-	b1;
-	  keys[t1]inter cols t2;
-	b2;
+    b1;
+      keys[t1]inter cols t2;
+    b2;
     cols[t1]inter keys t2;
   cols[t1]inter cols t2
   ];
