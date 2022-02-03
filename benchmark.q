@@ -28,10 +28,9 @@
  };
 
 / @param func (Symbol) Function name
-/ @param sect (Symbol) Section of function
 / @return (Table) Table containing tinke taken to execute section
-.bench.returnTimeStep:{[func;sect]
-  update diff:-':[`time$first datetime;`time$datetime] from select from .bench.BenchEachStep where function=func,section=sect
+.bench.returnTimeStep:{[func]
+  update diff:-':[`time$first datetime;`time$datetime] from select from .bench.BenchEachStep where function=func
  };
 
 // Example function
