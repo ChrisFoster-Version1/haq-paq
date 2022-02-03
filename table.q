@@ -207,10 +207,10 @@
   hsym[`$path,"/",string[intMap?pname],"/",string[tname],"/"]set .Q.en[p;data]
  };
 
-// Selectively ungroup a table by a subset of columns
-// @param tab (Table) Table to ungroup
-// @param columns (Symbols) Column(s) to ungroup by
-// @return (Table) Ungrouped table
+/ Selectively ungroup a table by a subset of columns
+/ @param tab (Table) Table to ungroup
+/ @param columns (SymbolList) Column(s) to ungroup by
+/ @return (Table) Ungrouped table
 .tbl.ungroupBy:{[tab;columns]
   if[0=count columns;:tab];
   raze{enlist[x]cross ungroup enlist y}'[tab;((),columns)#tab]
