@@ -8,14 +8,18 @@
 //                          Misc Utilities                                  //
 
 
-// Setting up a dictionary without a specified type
+/ Set up a dictionary without a specified type
+/ @param dict (Dict) Dictionary
+/ @return (Dict) Dictionary of non-specified type
 .ut.makeDictGenType:{[dict]
   (enlist[`]!enlist(::)),dict
  };
 
-// Takes a list column and a boolean column as inputs (list of lists)
+/ Index into list columns of a table
+/ @param columns (SymbolList) Columns
+/ @param booleans (BooleanList) Nested Boolean lists
 // example: t:0!select side,v by id from([]id:5?`k`l`n;side:5?`b`s;v:5?100)
-//          select id,.ut.indexListCl[v;side=`b]from t
+//          select id,.ut.indexListColumns[v;side=`b]from t
 .ut.indexListColumns:{[columns;booleans]
   columns@'where each booleans
  };
