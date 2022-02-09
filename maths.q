@@ -21,7 +21,10 @@
   count[l]%count distinct l:datecol inter .z.d-til num
  };
 
-// Greatest common divisor of 2 integers
+/ Greatest common divisor of 2 integers
+/ @param num1 (Long) number 
+/ @param num2 (Long) number
+/ @return (Long) greatest common divisor
 .maths.gcd:{[num1;num2]
   $[num2=0;
     abs num1;
@@ -29,48 +32,71 @@
    ]
  };
 
-// Lowest common multiple of 2 integers
+/ Lowest common multiple of 2 integers
+/ @param num1 (Long) number 
+/ @param num2 (Long) number
+/ @return (Long) lowest common multiple
+/ @see .maths.gcd
 .maths.lcm:{[num1;num2]
   abs(num1*num2)div .maths.gcd[num1;num2]
  };
 
-// Round num to decplaces decimal place
+/ Round num to decplaces decimal place
+/ @param decplaces (Long) number of decimal places to round to
+/ @param num (Float) number to round 
+/ @return (Float) rounded number
 // example .maths.round[2;10.4534545]
 .maths.round:{[decplaces;num]
   %[;dv]`long$num*dv:10 xexp decplaces
  };
 
-// Replicate Python functionality for linspace
-// Return num evenly spaces samples, calculated over the interval [start,stop]
-// start = number at beginning of range | stop = number at end of range | num = count of range
-// Output doesn't include stop
+/ Replicate Python functionality for linspace
+/ <br> Return num evenly spaces samples, calculated over the interval [start,stop] </br>
+/ @param start (Long) number at beginning of range 
+/ @param stop (Long) number at end of range 
+/ @param num (Long) count of range
+/ @return (LongList) return num evenly spaces sample (output doesn't include stop)
 .maths.linspace:{[start;stop;num]
   start+til[num]*(stop-start)%num
  };
-// Output includes stop
+
+/ @param start (Long) number at beginning of range 
+/ @param stop (Long) number at end of range 
+/ @param num (Long) count of range
+/ @return (LongList) return num evenly spaces sample with stop value included
 .maths.linspaceWithY:{[start;stop;num]
   start+til[num]*(stop-start)%num-1
  };
 
-// Return the discriminant of ax^2 + bx + c
+/ Return the discriminant of ax^2 + bx + c
+/ @param a (Float) coefficient of x^2 
+/ @param b (Float) coefficient of x
+/ @param c (Float) constant of the quadratic
+/ @return (Float) the discrimant of the quadratic 
 .maths.getDiscriminant:{[a;b;c]
   (b*b)-4*a*c
  };
 
-// Return the solutions to ax^2 + bx + c = 0 (returns nulls for complex roots)
-// a = coefficient of x^2 | b = coefficient of x | c = constant
+/ Return the solutions to ax^2 + bx + c = 0 (returns nulls for complex roots)
+/ @param a (Float) coefficient of x^2 
+/ @param b (Float) coefficient of x
+/ @param c (Float) constant of the quadratic
+/ @return (FloatList) returns roots of the quadratic
 .maths.solveQuadratic:{[a;b;c]
   (1%a*2)*neg[b]+1 -1*sqrt .maths.getDiscriminant[a;b;c]
  };
 
-// Return the mode of a list
-.maths.findListMode:{[list]
-  where max[c]=c:count each group list
+/ Return the mode of a list
+/ @param lst (LongList) list of numbers 
+/ @return (LongList) mode of the list 
+.maths.findListMode:{[lst]
+  where max[c]=c:count each group lst
  };
 
-// Truncating (round towards 0) num to decplaces decimal places
-// decplaces = number of decimals | num = number to be truncated
-// example .maths.truncate[2;-10.4534545]
+/ Truncating (round towards 0) num to decplaces decimal places
+/ @param decplaces (Long) number of decimals 
+/ @param num (Float) number to be truncated
+/ @return (Float) truncated float 
 .maths.truncate:{[decplaces;num]
   $[decplaces=0;
     $[num<0;ceiling;floor]num;
@@ -78,12 +104,16 @@
    ]
  };
 
-// Return the factorial of a non-negative integer, num
+/ Return the factorial of a non-negative integer, num
+/ @param num (Long) number
+/ @return (Long) returns the factorial of the number 
 .maths.factorial:{[num]
   prd 1+til num
  };
 
-// Return the num-th prime number
+/ Return the x-th prime number
+/ @param num (Long) number
+/ @return (Long) the x-th prime number
 .maths.nthPrime:{[num]
   if[num>5;
     :.maths.returnXPrime[num]num-1
@@ -91,19 +121,26 @@
   1 2 3 5 7 11 num
  };
 
-// Returns list of prime numbers to some number x
+/ Returns list of prime numbers to some number x
+/ @param num (Long) number
+/ @return (LongList) list of prime numbers to some number x
 .maths.returnXPrime:{[num]
   list:2_til ceiling num*log[num]+log log num;
   num sublist {x except 1_x where 0=x mod x y}/[list;til ceiling sqrt num]
  }
 
-// Return all prime numbers less than num
+/ Return all prime numbers less than num
+/ @param num (Long) number
+/ @return (LongList) all prime numbers less than num
 .maths.listPrimes:{[num]
   {x except 1_x where 0=x mod x y}/[2_til num;til num]
  };
 
-// Replicate pandas.DataFrame to some degree
-// r=list of rows,c=list of cols,df = pivot table in kdb or ` (to return empty pivot table)
+/ Replicate pandas.DataFrame to a limited degree
+/ @param r (SymbolList) list of rows
+/ @param c (SymbolList) ist of cols
+/ @param df (Table|Symbol) pivot table or ` (to return empty pivot table)
+/ @return (Table) pivot of dimensions r and c 
 .maths.createPandasDF:{[r;c;df]
   v:enlist count[r]#0f;
   pvt:1!flip(`index,c)!enlist[r],count[c]#v;
