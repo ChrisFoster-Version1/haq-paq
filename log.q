@@ -14,10 +14,9 @@
   "|" sv "=" sv/: string key[w],'value w:.Q.w[]
  };
 
-// Basic loggers
-// Could add a true/false flag to stop updating into the table for errors
 / Table storing error messages
 .log.Error:flip`time`message!"ps"$\:()
+
 / Publish to stdout
 / @param msg (String) Log message
 .log.publishInfo:{[msg]
