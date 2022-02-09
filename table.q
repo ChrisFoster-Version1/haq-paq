@@ -68,7 +68,7 @@
 / @param tbl (Table) the update of the link reference table 
 / @param gt (Symbol) Global table
 / @param lt (Symbol) Linked table
-/ @return (Table) The first table input with the links added from the global tables
+/ @return (Symbol) name of updated table.
 .tbl.relink:{[tbl;gt;lt]
   ky:keys tbl;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key tbl);
@@ -198,8 +198,8 @@
  };
 
 / Efficient union join over 
-/ @param tabs (TableList) list of tables to union join together
-/ @return (Table) result of using union join on list of tables 
+/ @param tabs (List) list of tables to union join together
+/ @return (Table) result of using union join on list of tables  
 .tbl.optimalUnionOver:{[tabs]
   (uj/) raze each tbls group cols each tabs
  };
