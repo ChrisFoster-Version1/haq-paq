@@ -39,7 +39,6 @@
  };
 
 / Multi pivot for x columns
-// t=table | g = group column (row in pivot) | c=column to be the column | vl= list of columns to be the values between g+c
 / @param t (Table) table 
 / @param g (Symbol) column to group by
 / @param c (Symbol) column to become the key of pivot table
@@ -79,8 +78,6 @@
   gt upsert .tbl.llink[tbl;lt]
  };
 
-// See example in .tbl.llink
-// .tbl.isLinked`Market
 / Checks what tables are linked to the input 
 / @param tname (Symbol) table name 
 / @return (SymbolList) list of tables that have the input linked to them
