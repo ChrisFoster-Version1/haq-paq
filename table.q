@@ -8,7 +8,9 @@
 //                          Table Utilities                                 //
 
 
-// Takes a table or sym as input
+/ Returns raw data from a tablename or denumerates a list
+/ @param tblOrSym (Symbol|SymbolList) Table name or enumerated symbol list to resolve
+/ @return (Table|SymbolList) 
 .tbl.resolve:{[tblOrSym]
   $[-11h=type tblOrSym;
     value tblOrSym;
@@ -16,98 +18,99 @@
    ]
  };
 
-// Takes a table or sym as input
+/ Denenumerate table or reference to a table
+/ @param tblOrSym (Table|Symbol) Table or reference to a table to resolve
+/ @return (Table) Denumerated table
+/ @see .tbl.resolve
 .tbl.denum:{[tblOrSym]
   enumCols:where (type each flip res:0!.tbl.resolve tblOrSym)within 20 76h;
   keys[tblOrSym]xkey ![res;();0b;enumCols!value ,/:enumCols]
  };
 
-// similar to above
-// .tbl.denumerate:{keys[x]xkey@[0!x;where type'[flip 0!x]within 20 76h;get]}
-
-// Pivot table creation dynamic
-// t=table | g = group column (row in pivot) | c=column to be the column | v= column to be the values between g+c
-// example tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f) | .tbl.createPivot[tbl;`cl;`n;`f]
+/ Creating a pivot table dynamically 
+/ @param t (Table) table 
+/ @param g (Symbol) column to group by
+/ @param c (Symbol) column to become the key of pivot table
+/ @param v (Symbol) column which becomes the values in the pivot table
+/ @return (Table) Pivot table
 .tbl.createPivot:{[t;g;c;v]
   s:asc?[t;();();(distinct;c)];
   ?[t;();enlist[g]!enlist g;](#;enlist s;(!;c;v))
  };
-// Multi pivot?
+
+/ Multi pivot for x columns
 // t=table | g = group column (row in pivot) | c=column to be the column | vl= list of columns to be the values between g+c
-// example:.tbl.createMultiPivot[tbl;`cl;`n;`f`g]
-// tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f;g:5?10f)
+/ @param t (Table) table 
+/ @param g (Symbol) column to group by
+/ @param c (Symbol) column to become the key of pivot table
+/ @param vl (SymbolList) column(s) which becomes the values in the pivot table
+/ @return (Table) Pivot table
 .tbl.createMultiPivot:{[t;g;c;vl]
   raze{[t;g;c;v](`ky,g) xkey update ky:v from .tbl.createPivot[t;g;c;v]}[t;g;c]each vl
  };
 
-// Convert from a pivot table to a normal kdb table
-// t=pivot table | g = group column (row in pivot) | c=column to be the column | v= column to be the values between g+c
-//example tbl:([]cl:1 2 2 1 2;n:`b`k`b`k`l;f:5?5f)
-//        res:.tbl.createPivot[tbl;`cl;`n;`f]
-//        .tbl.convertFromPivot[res;`cl;`n;`f]
-// technically should remove nulls too
+/ Convert from a pivot table to a normal kdb table
+/ @param t (Table) Pivot table 
+/ @param g (Symbol) column which is grouped
+/ @param c (Symbol) column which is the key of the pivot table
+/ @param v (Symbol) column which becomes the values in the pivot table
+/ @return (Table) normal table
 .tbl.convertFromPivot:{[t;g;c;v]
   cls:cols[t]except g;
   flip (g;c;v)!raze each(count[cls]#enlist ?[t;();();g];count[t]#/:cls;t cls)
  };
 
-// Create a link between a table of data and x other tables
-// Example: Order:([uuid:10?`5];id:10?`vod`ms`fd`orc;qty:10?50)
-//          Product:([id:`vod`ms`fd];dsc:`$("VOD";"Morgan";"First Deriv"))
-//          Market:([id:`fd`vod`ms];price:3?10f)
-//          .tbl.llink[Order;`Product`Market]
-.tbl.llink:{x lj k xkey?[y;();0b;](k,lower y)!(k:keys y),enlist(!;enlist y;`i)}/
+/ Create link(s) between a table of data and x other tables
+/ @param tbl (Table) Table of data to add links
+/ @param lnkTbl (SymbolList) Global table names which will be linked to the data
+/ @return The first table input with the links added from the global tables
+.tbl.llink:{[tbl;lnkTbl]
+  tbl lj k xkey?[lnkTbl;();0b;](k,lower lnkTbl)!(k:keys lnkTbl),enlist(!;enlist lnkTbl;`i)
+ }/;
 
-// Relinking data to a table which has a link and the static (ish) table has been updated
-// Input : data= the update of the link reference table
-//         gt=global table (Order)
-//         lt=linked table (Market)
-// example upsert an orc row in data for llink reference then
+/ Relinking data to a table which has a link and the static (ish) table has been updated
+/ @param data (Table) the update of the link reference table 
+/ @param gt (Symbol) Global table
+/ @param lt (Symbol) Linked table
+/ @return The first table input with the links added from the global tables
 .tbl.relink:{[data;gt;lt]
   ky:keys data;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key data);
   gt upsert .tbl.llink[tbl;lt]
  };
 
-// Compare 2 tables for a specific check
-// tab1 = table | tab2 = table | check = symbol describing a check like `count
-.tbl.tabCompare:{[tab1;tab2;check]
-  if[check~`identical;:(~).-8!/:(tab1;tab2)];
-  if[check~`count;:count[tab1]~count tab2];
-  if[check~`subset;:0=count tab2 except tab1]
- };
+// See example in .tbl.llink
+// .tbl.isLinked`Market
+/ Checks what tables are linked to the input 
+/ @param tname (Symbol) table name 
+/ @return (SymbolList) list of tables that have the input linked to them
+.tbl.isLinked:{[tname]
+  where tables[]!{x in fkeys y}[tname]each tables`
+ }
 
-// Haven't dealt with this situation before so I'm not sure what the appropriate setup is.
-// This function assumes that any column-values missing have been cut off from the end of the column files.
-// Then, it resaves down the table, with all columns truncated to the length of the shortest one.
-// dir = splayed table file handle
+/ Resaves the splay table with all columns truncated to the length of the shortest one
+/ <br> As previously columns of the splay had different lengths </br>
+/ @param dir (Symbol) Directory where splay table is stored
 .tbl.fixSplayCnt:{[dir]
   m:min count each c:get each `$(string[dir],"/"),/:string cols dir;
   (hsym `$string[dir],"/") set flip cols[dir]!m#/:c
  };
 
-// outputs csv as table of strings, without dev counting number of columns
-// file = CSV file handle
+/ Outputs csv as a table of strings without user counting number of columns
+/ @param file (Symbol) filename
+/ @return (Table) table of strings from input CSV, without need to count CSV's number of columns
 .tbl.loadCsvWithStrings:{[file]
   n:1+sum ","=first c:read0 file;
   (n#"*";enlist",")0:c
  };
 
-// outputs csv as table of types matching an input schema
-// file = CSV file handle | tab = table or table name
-// quote:([]time: `timestamp$();sym: `$();bid: `float$();ask: `float$();size: `long$())
-// {(upper (0!meta y) `t;enlist",")0:x}[ `:test.csv; `quote]
-// test.csv:
-// time,sym,bid,ask,size
-// 2021.10.10D01:00,AAPL,27,27.1,100
-// 2021.11.12D01:02,GOOG,102,102,50
+/ Convert a csv file passed of a schema
+/ @param file (Symbol) csv file 
+/ @param tab (Table|Symbol) raw table or table name as a symbol 
+/ @return (Table) returns a table converted from a csv
 .tbl.loadCsvWithSchema:{[file;tab]
   (upper (0!meta tab)`t;enlist",")0:file
  };
-
-// See example in .tbl.llink
-// .tbl.isLinked`Market
-.tbl.isLinked:{where tables[]!{x in fkeys y}[x]each tables`}
 
 // Example tables for the comparisons
 //tbl1:([]id:`k`h`j`l`j`p;qty:10 40 40 30 15 0);
@@ -115,9 +118,19 @@
 //tk1:([id:`p`m`n];qty:5 10 15);
 //tk2:([id:`o`p`m];qty:10 7 10);
 
+/ Check if a table is keyed or not
+/ @param tab (Table|Symbol) table or table name 
+/ @return (Boolean) True/False depending on if it passed
 .tbl.isKeyed:{[tab]
-  not keys[tab]~`symbol$()
+  0<count keys tab
  };
+ 
+/ Runs a comparison between 2 tables for the columns in those tables
+/ <br>If the table is keyed will only consider the keyed columns </br>
+/ @param f (Function) function to do comparison inter/except etc
+/ @param t1 (Table) table 
+/ @param t2 (Table) table 
+/ @return (Table) Subset of data depending on the function
 .tbl.comparison:{[f;t1;t2]
   b1:$[.tbl.isKeyed t1;keys;cols] t1;
   b2:$[.tbl.isKeyed t2;keys;cols] t2;
@@ -125,34 +138,58 @@
   (f). ?[;();0b;cls!cls]each(t1;t2)
  };
 
-// Runs a comparison between 2 tables for the columns in those tables
-// If the table is keyed will only consider the keyed columns
+/ Projection of comparison for just except
+/ @param t1 (Table) table 
+/ @param t2 (Table) table 
+/ @return (Table) Subset of data after doing except
 .tbl.compExcept:.tbl.comparison[except];
+
+/ Projection of comparison for just inter
+/ @param t1 (Table) table 
+/ @param t2 (Table) table 
+/ @return (Table) Subset of data after doing inter 
 .tbl.compInter:.tbl.comparison[inter];
 
-// dict=dictionary to rename cols
-// tab=table
-// example : .tbl.renameColumns[`sym`src!`SYM`SRC;([]time:3#.z.p;sym:3#`AAPL;src:3#`CITI)]
+/ Compare 2 tables for a specific check
+// tab1 = table | tab2 = table | check = symbol describing a check like `count
+/ @param tab1 (Table) table
+/ @param tab2 (Table) table
+/ @param check (Symbol) 3 types of checks `identical/`count/`subset
+/ @return (Boolean) True/False depending if test passes
+.tbl.tabCompare:{[tab1;tab2;check]
+  if[check~`identical;:(~).-8!/:(tab1;tab2)];
+  if[check~`count;:count[tab1]~count tab2];
+  if[check~`subset;:0=count tab2 except tab1]
+ };
+
+/ Rename columns in a table using a map (for pre3.6 versions of kdb+)
+/ @param dict (Dict) dictionary to rename cols
+/ @param tab (Table) table
+/ @return (Table) table with renamed columns specified in the dictionary
 .tbl.renameColumns:{[dict;tab]
   {y^x y}[dict;cols tab] xcol tab
  };
 
-// Set a schema in q like so then a function to create it (didnt add the attr but not hard to do)
+/
+// example schema
 .schema.Alert:`kcol`ktype`kkey`kattr!/:
  ((`id     ; "s" ; 0b ; ` );
   (`time   ; "t" ; 0b ; ` );
   (`signal ; "s" ; 0b ; ` );
   (`msg    ; ""  ; 0b ; ` );
   (`part   ; "j" ; 0b ; ` ));
-.tbl.createTbl:{x set exec (kcol where kkey)xkey flip kcol!ktype$\:()from .schema x};
+\
 
-// Adding an int partition db
+/ Created a global table from some predefined schema
+/ @param tname (Symbol) table name
+/ @return (Symbol) Name of created global table
+.tbl.createTbl:{[tname]
+  x set exec (kcol where kkey)xkey flip kcol!ktype$\:()from .schema x
+ };
 
-
-// Could change it to take a 2nd input for the db path
-// It is also assumed the int partition has a sym file to track what each int represents called intMap
-// tname = the table on disk name - otherwise will duplicate the count but could look into resolving this in a different way
-// For tracking the size of the db partition
+/ Integer partition database disk space stats
+/ @param tname (Symbol) table name
+/ @return (Table) Of stats for disk space used for hdb
 .tbl.getIntDBSize:{[tname]
   name:"*",tname,"*";
   res1:system"du | awk '{ print $1\"|\"$2}'";
@@ -163,9 +200,8 @@
   `name`int xkey update total:sum num_size from tbl
  };
 
-// Same as above function but for date partitions
-// TODO - Note no input using a hacky way to
-// Same thing as the above testing
+/ Date partition database disk space stats
+/ @return (Table) Of stats for disk space used for hdb
 .tbl.getDateDBSize:{[]
   res1:system"du | awk '{ print $1\"|\"$2}'";
   tbl:update name:` from 0!select first"J"$num_size by date:"D"$2_/:partition from`num_size`partition!/:"|"vs/:res1 where 1=count each group'[partition]@\:"/";
@@ -174,37 +210,21 @@
   `name`date xkey update total:sum num_size from tbl
  };
 
-// Should this be in tables? (uj/)?
-// Example:
-// n:10000 / number of rows
-// tbl:([]c1:n?100f;c2:n?100i;c3:n?100j;c4:n?.z.d;c5:n?.z.t) / create a random table
-// \t:10 tblVersions,:enlist ?[-3;cols tbl]#tbl / from tbl, create 10 different tables of random schema
-// Comparison
-// tblCopies:100?tblVersions / take 100 copies of tblVersion - which will give a list of tables of repeating mixed schemas
-// \ts a:(uj/) tblCopies
-// 257 92799808
-// \ts b:(uj/) .tbl.optimalUnionOver tblCopies
-// 73 119803712
-// (~) . (cols[a] xasc a;cols[b] xasc b)
-// 1b
-// (uj/) is useful if you have a list of mixed key dictionaries, and you want to convert it to a table.
-// (uj/) is pretty expensive the bigger the list gets
-// group all common schemas together first before running uj over
+/ Efficient union join over 
+/ @param (TableList) list of tables to union join together
+/ @return (Table) result of using union join on list of tables 
 .tbl.optimalUnionOver:{[tabs]
   (uj/) raze each tbls group cols each tabs
  };
 
-// Creating an integer partition db
-// Inputs: - path  - directory path
-//         - pname - partition name
-//         - tname - table name
-//         - data  - table to save to disk
-// Example: d:`path`pname`tname!(".";`test1;`HistData)
-// d=`path`pname`tname!("path";`part name;`table name) | data=table
-// d[`pname]:first 1?`9;.tbl.saveAsIntPart[d`path;d`pname;d`tname;([]date:.z.d-til 5;name:5?`3;val:5?5)]
+/ Saves data to an integer partition db
+/ @param path (String) directory path
+/ @param pname (Symbol) partition name
+/ @param tname (Symbol) table name
+/ @param data (Table) table to save to disk
 .tbl.saveAsIntPart:{[path;pname;tname;data]
   .Q.ens[p:hsym`$path;;`intMap]([]id:(),pname);
-  hsym[`$path,"/",string[intMap?pname],"/",string[tname],"/"]set .Q.en[p;data]
+  hsym[`$path,"/",string[intMap?pname],"/",string[tname],"/"]set .Q.en[p;data];
  };
 
 / Selectively ungroup a table by a subset of columns
