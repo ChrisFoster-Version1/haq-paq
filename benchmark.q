@@ -32,17 +32,3 @@
 .bench.returnTimeStep:{[func]
   update diff:-':[`time$first datetime;`time$datetime] from select from .bench.BenchEachStep where function=func
  };
-
-// Example function
-.bench.testQuery:{[]
-  f:.bench.logStep`testQuery;
-  f`start;
-  do[100;7*8];
-  f`multiDone;
-  do[1000;til 90000];
-  f`listCreation1;
-  do[7500;til 75000];
-  f`listCreation2;
-  k:8;
-  f`done
- };
