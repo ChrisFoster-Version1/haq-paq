@@ -8,14 +8,11 @@
 //                          Table Utilities                                 //
 
 
-/ Returns raw data from a tablename or denumerates a list
-/ @param tblOrSym (Symbol|SymbolList) Table name or enumerated symbol list to resolve
-/ @return (Table|SymbolList) 
+/ Returns resolved table if a reference to a table is passed
+/ @param tblOrSym (Table|Symbol) Table or reference to a table to resolve
+/ @return (Table) Resolved table
 .tbl.resolve:{[tblOrSym]
-  $[-11h=type tblOrSym;
-    value tblOrSym;
-    tblOrSym
-   ]
+  $[-11h=type tblOrSym;value;]tblOrSym
  };
 
 / Denenumerate table or reference to a table
@@ -62,7 +59,7 @@
 / Create link(s) between a table of data and x other tables
 / @param tbl (Table) Table of data to add links
 / @param lnkTbl (SymbolList) Global table names which will be linked to the data
-/ @return The first table input with the links added from the global tables
+/ @return (Table) The first table input with the links added from the global tables
 .tbl.llink:{[tbl;lnkTbl]
   tbl lj k xkey?[lnkTbl;();0b;](k,lower lnkTbl)!(k:keys lnkTbl),enlist(!;enlist lnkTbl;`i)
  }/;
@@ -71,7 +68,7 @@
 / @param tbl (Table) the update of the link reference table 
 / @param gt (Symbol) Global table
 / @param lt (Symbol) Linked table
-/ @return The first table input with the links added from the global tables
+/ @return (Table) The first table input with the links added from the global tables
 .tbl.relink:{[tbl;gt;lt]
   ky:keys tbl;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key tbl);
@@ -201,7 +198,7 @@
  };
 
 / Efficient union join over 
-/ @param (TableList) list of tables to union join together
+/ @param tabs (TableList) list of tables to union join together
 / @return (Table) result of using union join on list of tables 
 .tbl.optimalUnionOver:{[tabs]
   (uj/) raze each tbls group cols each tabs
