@@ -20,11 +20,11 @@
 / Publish to stdout
 / @param msg (String) Log message
 .log.publishInfo:{[msg]
-  1 "INFO ",.log.getMemStats[]," ",msg;
+  -1 "INFO ",.log.getMemStats[]," ",msg;
  };
 
 / Publish to stderr
 / @param msg (String) Log message
 .log.publishError:{[msg]
-  2 "ERROR ",.log.getMemStats[]," ",msg;`.log.Error upsert (.z.p;`$msg)
+  -2 "ERROR ",.log.getMemStats[]," ",msg;`.log.Error upsert (.z.p;`$msg)
  };
