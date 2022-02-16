@@ -130,12 +130,14 @@
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
 / @return (Table) Subset of data after doing except
+/ @see .tbl.comparison
 .tbl.compExcept:.tbl.comparison[except];
 
 / Projection of comparison for just inter
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
 / @return (Table) Subset of data after doing inter 
+/ @see .tbl.comparison
 .tbl.compInter:.tbl.comparison[inter];
 
 / Compare 2 tables for a specific check
