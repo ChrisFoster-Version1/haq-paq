@@ -15,7 +15,7 @@
   $[-11h=type tblOrSym;value;]tblOrSym
  };
 
-/ Denenumerate table or reference to a table
+/ Denumerate table or reference to a table
 / @param tblOrSym (Table|Symbol) Table or reference to a table to resolve
 / @return (Table) Denumerated table
 / @see .tbl.resolve
