@@ -111,19 +111,19 @@
 / @return (Long) the x-th prime number
 / @see .maths.returnXPrime
 .maths.nthPrime:{[num]
-  if[num>5;
-    :.maths.returnXPrime[num]num-1
-  ];
-  1 2 3 5 7 11 num
+  last .maths.returnXPrime num
  };
 
-/ Returns list of prime numbers to some number x
+/ Returns the first x prime numbers
 / @param num (Long) number
-/ @return (LongList) list of prime numbers to some number x
+/ @return (LongList) list of first x prime numbers
 .maths.returnXPrime:{[num]
+  if[num<6;
+    :num#2 3 5 7 11
+  ];
   list:2_til ceiling num*log[num]+log log num;
   num sublist {x except 1_x where 0=x mod x y}/[list;til ceiling sqrt num]
- }
+ };
 
 / Return all prime numbers less than num
 / @param num (Long) number
