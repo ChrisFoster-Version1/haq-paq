@@ -76,6 +76,7 @@
 / @param b (Float) coefficient of x
 / @param c (Float) constant of the quadratic
 / @return (FloatList) returns roots of the quadratic
+/ @see .maths.getDiscriminant
 .maths.solveQuadratic:{[a;b;c]
   (1%a*2)*neg[b]+1 -1*sqrt .maths.getDiscriminant[a;b;c]
  };
@@ -108,6 +109,7 @@
 / Return the x-th prime number
 / @param num (Long) number
 / @return (Long) the x-th prime number
+/ @see .maths.returnXPrime
 .maths.nthPrime:{[num]
   if[num>5;
     :.maths.returnXPrime[num]num-1

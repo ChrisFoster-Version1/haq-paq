@@ -41,6 +41,7 @@
 / @param c (Symbol) column to become the key of pivot table
 / @param vl (SymbolList) column(s) which becomes the values in the pivot table
 / @return (Table) Pivot table
+/ @see .tbl.createPivot
 .tbl.createMultiPivot:{[tbl;g;c;vl]
   raze{[tbl;g;c;v](`ky,g) xkey update ky:v from .tbl.createPivot[tbl;g;c;v]}[tbl;g;c]each vl
  };
@@ -69,6 +70,7 @@
 / @param gt (Symbol) Global table
 / @param lt (Symbol) Linked table
 / @return (Symbol) name of updated table.
+/ @see .tbl.llink
 .tbl.relink:{[tbl;gt;lt]
   ky:keys tbl;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key tbl);
@@ -119,6 +121,7 @@
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
 / @return (Table) Subset of data depending on the function
+/ @see .tbl.isKeyed
 .tbl.comparison:{[f;tbl1;tbl2]
   b1:$[.tbl.isKeyed tbl1;keys;cols] tbl1;
   b2:$[.tbl.isKeyed tbl2;keys;cols] tbl2;
@@ -200,7 +203,7 @@
  };
 
 / Selectively ungroup a table by a subset of columns
-/ @param tbl (Table) Table to ungroup
+/ @param tbl (Table) Unkeyed table to ungroup
 / @param columns (SymbolList) Column(s) to ungroup by
 / @return (Table) Ungrouped table
 .tbl.ungroupBy:{[tbl;columns]

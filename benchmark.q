@@ -29,6 +29,7 @@
 
 / @param func (Symbol) Function name
 / @return (Table) Table containing time taken to execute section
+/ @see .bench.BenchEachStep
 .bench.returnTimeStep:{[func]
   update diff:-':[`time$first datetime;`time$datetime] from select from .bench.BenchEachStep where function=func
  };
