@@ -59,20 +59,32 @@
   num sublist l where not(l mod 7)in 0 1
  };
 
-/ Convert kdb timestamp to millisecond-based Unix timestamp
-/ @param milliseconds (Int) Millisecond-based Unix timestamp
-/ @param isTimestamp (Boolean) Whether milliseconds provided is a timestamp or time
+/ Convert second-based Unix timestamp to kdb timestamp
+/ @param seconds (Long) Second-based Unix timestamp
 / @return (Timestamp) kdb timestamp
-.chrono.unixToQ:{[milliseconds;isTimestamp]
-  res:1970.01.01+0D00:00:00.001*milliseconds;
-  $[isTimestamp;"t"$res;res]
+.chrono.unixToQ:{[seconds]
+  :"p"$("j"$1970.01.01D00:00)+unix*1e9;
+ };
+
+/ Convert kdb timestamp to second-based Unix timestamp (equivalent to date +%s)
+/ @param timestamp (Timestamp) kdb timestamp
+/ @return (Long) Second-based Unix timestamp
+.chrono.qToUnix:{[timestamp]
+  :floor(("j"$timestamp)-"j"$1970.01.01D00:00)%1e9;
  };
 
 / Convert millisecond-based Unix timestamp to kdb timestamp
+/ @param milliseconds (Long) Millisecond-based Unix timestamp
+/ @return (Timestamp) kdb timestamp
+.chrono.unixToQMS:{[milliseconds]
+  :1970.01.01+0D00:00:00.001*milliseconds;
+ };
+
+/ Convert kdb timestamp to millisecond-based Unix timestamp (equivalent to date +%s%3N)
 / @param timestamp (Timestamp) kdb timestamp
-/ @return (Int) Millisecond-based Unix timestamp
-.chrono.qToUnix:{[timestamp]
-  "j"$(timestamp-1970.01.01D0)%0D00:00:00.001
+/ @return (Long) Millisecond-based Unix timestamp
+.chrono.qToUnixMS:{[timestamp]
+  :"j"$(timestamp-1970.01.01D0)%0D00:00:00.001;
  };
 
 / Modifying date format
