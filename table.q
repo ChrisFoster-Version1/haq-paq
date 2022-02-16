@@ -159,23 +159,6 @@
   {y^x y}[dict;cols tbl] xcol tbl
  };
 
-/
-// example schema
-.schema.Alert:`kcol`ktype`kkey`kattr!/:
- ((`id     ; "s" ; 0b ; ` );
-  (`time   ; "t" ; 0b ; ` );
-  (`signal ; "s" ; 0b ; ` );
-  (`msg    ; ""  ; 0b ; ` );
-  (`part   ; "j" ; 0b ; ` ));
-\
-
-/ Created a global table from some predefined schema
-/ @param tblName (Symbol) table name
-/ @return (Symbol) Name of created global table
-.tbl.createTbl:{[tblName]
-  tblName set exec (kcol where kkey)xkey flip kcol!ktype$\:()from .schema tblName
- };
-
 / Integer partition database disk space stats
 / @param tblName (Symbol) table name
 / @return (Table) Of stats for disk space used for hdb
