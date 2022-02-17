@@ -53,6 +53,7 @@
 / @param v (Symbol) column which becomes the values in the pivot table
 / @return (Table) normal table
 .tbl.convertFromPivot:{[tbl;g;c;v]
+  tbl:0!tbl;
   cls:cols[tbl]except g;
   flip (g;c;v)!raze each(count[cls]#enlist ?[tbl;();();g];count[tbl]#/:cls;tbl cls)
  };
