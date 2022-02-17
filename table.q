@@ -54,7 +54,7 @@
 / @return (Table) normal table
 .tbl.convertFromPivot:{[tbl;g;c;v]
   cls:cols[tbl]except g;
-  flip (g;c;v)!raze each(count[cls]#enlist ?[tbl;();();g];count[t]#/:cls;t cls)
+  flip (g;c;v)!raze each(count[cls]#enlist ?[tbl;();();g];count[tbl]#/:cls;tbl cls)
  };
 
 / Create link(s) between a table of data and x other tables
