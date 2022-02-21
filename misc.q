@@ -11,7 +11,7 @@
 / Set up a dictionary without a specified type
 / @param dict (Dict) Dictionary
 / @return (Dict) Dictionary of non-specified type
-.ut.makeDictGenType:{[dict]
+.misc.makeDictGenType:{[dict]
   (enlist[`]!enlist(::)),dict
  };
 
@@ -21,7 +21,7 @@
 / @return (SymbolList) Columns
 // example: t:0!select side,v by id from([]id:5?`k`l`n;side:5?`b`s;v:5?100)
 //          select id,.ut.indexListColumns[v;side=`b]from t
-.ut.indexListColumns:{[columns;booleans]
+.misc.indexListColumns:{[columns;booleans]
   columns@'where each booleans
  };
 
