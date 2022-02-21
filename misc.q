@@ -18,8 +18,16 @@
 / Index into list columns of a table
 / @param columns (SymbolList) Columns
 / @param booleans (BooleanList) Nested Boolean lists
+/ @return (SymbolList) Columns
 // example: t:0!select side,v by id from([]id:5?`k`l`n;side:5?`b`s;v:5?100)
 //          select id,.ut.indexListColumns[v;side=`b]from t
 .ut.indexListColumns:{[columns;booleans]
   columns@'where each booleans
+ };
+
+/ Get count of sym file
+/ @param sym (Symbol) Path to sym file
+/ @return (Int) Count of sym file
+.misc.getSymCount:{[sym]
+  sum 0x00=8_read1 sym
  };
