@@ -62,11 +62,11 @@
 / @param tbl (Table) Table of data to add links
 / @param lnkTbl (SymbolList) Global table names which will be linked to the data
 / @return (Table) The first table input with the links added from the global tables
-.tbl.llink:{[tbl;lnkTbl]
+.tbl.link:{[tbl;lnkTbl]
   tbl lj k xkey?[lnkTbl;();0b;](k,lower lnkTbl)!(k:keys lnkTbl),enlist(!;enlist lnkTbl;`i)
  }/;
 
-/ Relinking data to a table which has a link and the static (ish) table has been updated
+/ Relink data to a table which has a link and the static(ish) table has been updated
 / @param tbl (Table) the update of the link reference table 
 / @param gt (Symbol) Global table
 / @param lt (Symbol) Linked table
@@ -78,47 +78,47 @@
   gt upsert .tbl.llink[tbl;lt]
  };
 
-/ Checks what tables are linked to the input 
+/ Check which tables are linked to the input 
 / @param tblName (Symbol) table name 
 / @return (SymbolList) list of tables that have the input linked to them
 .tbl.isLinked:{[tblName]
   where tables[]!{x in fkeys y}[tblName]each tables`
  }
 
-/ Resaves the splay table with all columns truncated to the length of the shortest one
-/ <br> As previously columns of the splay had different lengths </br>
+/ Resave the splay table with all columns truncated to the length of the shortest one
+/ <br> In the event of columns of a splay having different lengths </br>
 / @param dir (Symbol) Directory where splay table is stored
 .tbl.fixSplayCnt:{[dir]
   m:min count each c:get each `$(string[dir],"/"),/:string cols dir;
   (hsym `$string[dir],"/") set flip cols[dir]!m#/:c
  };
 
-/ Outputs csv as a table of strings without user counting number of columns
+/ Output csv as a table of strings without the need for the number of columns to be known
 / @param file (Symbol) filename
-/ @return (Table) table of strings from input CSV, without need to count CSV's number of columns
+/ @return (Table) Table of strings from input csv
 .tbl.loadCsvWithStrings:{[file]
   n:1+sum ","=first c:read0 file;
   (n#"*";enlist",")0:c
  };
 
-/ Convert a csv file passed of a schema
+/ Output csv as a table conforming to a given table's column-types
 / @param file (Symbol) csv file 
 / @param tbl (Table|Symbol) raw table or table name as a symbol 
-/ @return (Table) returns a table converted from a csv
+/ @return (Table) Table with data from csv and column types from tbl
 .tbl.loadCsvWithSchema:{[file;tbl]
   (upper (0!meta tbl)`t;enlist",")0:file
  };
 
 / Check if a table is keyed or not
-/ @param tab (Table|Symbol) table or table name 
-/ @return (Boolean) True/False depending on if it passed
+/ @param tbl (Table|Symbol) table or table name 
+/ @return (Boolean) True/false depending on if table is keyed/unkeyed
 .tbl.isKeyed:{[tbl]
   0<count keys tbl
  };
  
 / Runs a comparison between 2 tables for the columns in those tables
 / <br>If the table is keyed will only consider the keyed columns </br>
-/ @param f (Function) function to do comparison inter/except etc
+/ @param f (Function) function to do comparison, example inter, except, etc
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
 / @return (Table) Subset of data depending on the function
@@ -133,14 +133,14 @@
 / Projection of comparison for just except
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
-/ @return (Table) Subset of data after doing except
+/ @return (Table) Subset of data after applying except
 / @see .tbl.comparison
 .tbl.compExcept:.tbl.comparison[except];
 
 / Projection of comparison for just inter
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
-/ @return (Table) Subset of data after doing inter 
+/ @return (Table) Subset of data after applying inter 
 / @see .tbl.comparison
 .tbl.compInter:.tbl.comparison[inter];
 
@@ -148,7 +148,7 @@
 / @param tbl1 (Table) table 
 / @param tbl2 (Table) table 
 / @param check (Symbol) 3 types of checks `identical/`count/`subset
-/ @return (Boolean) True/False depending if test passes
+/ @return (Boolean) True/false depending on if check is passed/failed
 .tbl.tabCompare:{[tbl1;tbl2;check]
   if[check~`identical;:(~).-8!/:(tbl1;tbl2)];
   if[check~`count;:count[tbl1]~count tbl2];
@@ -163,9 +163,9 @@
   {y^x y}[dict;cols tbl] xcol tbl
  };
 
-/ Integer partition database disk space stats
+/ Integer-partitioned database disk space stats
 / @param tblName (Symbol) table name
-/ @return (Table) Of stats for disk space used for hdb
+/ @return (Table) Table of stats for disk space used for hdb
 .tbl.getIntDBSize:{[tblName]
   name:"*",tblName,"*";
   res1:system"du | awk '{ print $1\"|\"$2}'";
@@ -176,8 +176,8 @@
   `name`int xkey update total:sum num_size from tbl
  };
 
-/ Date partition database disk space stats
-/ @return (Table) Of stats for disk space used for hdb
+/ Date-partitioned database disk space stats
+/ @return (Table) Table of stats for disk space used for hdb
 .tbl.getDateDBSize:{[]
   res1:system"du | awk '{ print $1\"|\"$2}'";
   tbl:update name:` from 0!select first"J"$num_size by date:"D"$2_/:partition from`num_size`partition!/:"|"vs/:res1 where 1=count each group'[partition]@\:"/";
@@ -186,14 +186,14 @@
   `name`date xkey update total:sum num_size from tbl
  };
 
-/ Efficient union join over 
-/ @param tabs (List) list of tables to union join together
-/ @return (Table) result of using union join on list of tables  
-.tbl.optimalUnionOver:{[tabs]
-  (uj/) raze each tbls group cols each tabs
+/ Efficiently union join over a given list of tables
+/ @param tbls (List) list of tables to union join together
+/ @return (Table) Result of appling union join over tbls input 
+.tbl.optimalUnionOver:{[tbls]
+  (uj/) raze each tbls group cols each tbls
  };
 
-/ Saves table to an integer partition db
+/ Save table to an integer partition db
 / @param path (String) directory path
 / @param partName (Symbol) partition name
 / @param tblName (Symbol) table name
