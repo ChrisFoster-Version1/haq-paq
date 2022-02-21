@@ -1,25 +1,30 @@
 # Haq-Paq
 
-Haq-Paq General Utilities Library by Version1
+Haq-Paq General Utilities Library by Version 1
 
 ## Maths Library
-General mathematics library covers a wide range of functionality that is normally found in other languages (such as python). 
-Included is a way to calculate prime numbers, use some useful list creation functions that exist in python, find the mode of a list etc. 
+Covers a wide range of functionality that is normally found in other languages (such as Python).
+Included is prime number calculation, list creation functions similar to those that exist in Python,
+such as linspace and calculating modal values.
 
 ## Chrono Library
-The Chrono Library has a variety of useful functions that can help a person. For example returning only weekdays or converting timestamps from unix to q etc.
+Has a variety of useful functions to assist when working with dates or timestamps in q.
+Such as returning getting start/end dates of a week/month, returning only weekdays from a range
+of dates or converting timestamps from unix to q etc.
 
 ## Format Library
-The Format Library is useful for returning information in a particular way. Like returning some number with comma separators or being able to read it in a human readable manor (1000 vs 1k).
+Useful for formatting information into strings, such as making numbers human readable,
+adding comma separatorsor replacing text tokens (similar to `format()` in Python).
 
 ## Log Library
-We created a Log Library to have a basic standardized way to write messages to the some log file.
+A basic standardized way to write messages to the some log file.
 
 ## Benchmark Library
-The Benchmark Library is a simple way of benchmarking how long parts of a function are taking to evaulate. 
+Simple ways of benchmarking execution times for subsections of functions.
 
 ## Table Library
-The Table Library is one of the biggest scripts and contains a wide variety of helpful functionality that ranges from fixing issues with splayed tables on disk to using integer partitioning.
+Contains a wide variety of helpful functionality for dealing with tables.
+This ranges from fixing issues with splayed tables on disk to using integer partitioning.
 
 ## Miscellaneous library
-General functions that do not fit neatly into any of the above categories but are still useful to have available to the user.
+General utility functions.
