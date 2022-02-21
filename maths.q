@@ -7,7 +7,7 @@
 
 //                          Mathematics Utilities                           //
 
-/ Get an x day average count 
+/ Get an num-day average count
 / @param datecol (DateList) date column
 / @param num (Long) number of days before today to consider
 / @return (FloatList) average number of entries per date where records for date exist
@@ -46,18 +46,18 @@
 
 / Replicate Python functionality for linspace
 / <br> Return num evenly spaces samples, calculated over the interval [start,stop] </br>
-/ @param start (Long) number at beginning of range 
-/ @param stop (Long) number at end of range 
+/ @param start (Long|Float) number at beginning of range 
+/ @param stop (Long|Float) number at end of range 
 / @param num (Long) count of range
-/ @return (LongList) return num evenly spaces sample (output doesn't include stop)
+/ @return (FloatList) evenly spaced list of count num, spanning [start,stop] (not including stop)
 .maths.linspace:{[start;stop;num]
   start+til[num]*(stop-start)%num
  };
 
-/ @param start (Long) number at beginning of range 
-/ @param stop (Long) number at end of range 
+/ @param start (Long|Float) number at beginning of range 
+/ @param stop (Long|Float) number at end of range 
 / @param num (Long) count of range
-/ @return (LongList) return num evenly spaces sample with stop value included
+/ @return (FloatList) evenly spaced list of count num, spanning [start,stop] (including stop)
 .maths.linspaceWithY:{[start;stop;num]
   start+til[num]*(stop-start)%num-1
  };
@@ -82,13 +82,13 @@
  };
 
 / Return the mode of a list
-/ @param lst (LongList) list of numbers 
-/ @return (LongList) mode of the list 
-.maths.findListMode:{[lst]
+/ @param lst (List) list of numbers 
+/ @return (List) mode of the list 
+.maths.getListMode:{[lst]
   where max[c]=c:count each group lst
  };
 
-/ Truncating (round towards 0) num to decplaces decimal places
+/ Truncate (round towards 0) num to decplaces decimal places
 / @param decplaces (Long) number of decimals 
 / @param num (Float) number to be truncated
 / @return (Float) truncated float 
@@ -106,18 +106,18 @@
   prd 1+til num
  };
 
-/ Return the x-th prime number
+/ Return the num-th prime number
 / @param num (Long) number
-/ @return (Long) the x-th prime number
+/ @return (Long) the num-th prime number
 / @see .maths.returnXPrime
 .maths.nthPrime:{[num]
   last .maths.returnXPrime num
  };
 
-/ Returns the first x prime numbers
+/ Return the first num prime numbers
 / @param num (Long) number
-/ @return (LongList) list of first x prime numbers
-.maths.returnXPrime:{[num]
+/ @return (LongList) list of first num prime numbers
+.maths.getXPrimes:{[num]
   if[num<6;
     :num#2 3 5 7 11
   ];
