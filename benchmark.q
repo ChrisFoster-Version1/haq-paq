@@ -23,7 +23,7 @@
 
 / Basic upsert which records the time when a section of a function was executed
 / @param func (Symbol) Function name
-/ @param sect (Symbol) Section of function
+/ @param sect (Symbol) Section of function (some symbol name identifier to identify function section)
 .bench.logStep:{[func;sect]
   `.bench.BenchEachStep upsert (func;sect;.z.P)
  };

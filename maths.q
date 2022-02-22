@@ -7,7 +7,7 @@
 
 //                          Mathematics Utilities                           //
 
-/ Get an num-day average count
+/ Get an num-day average count for a table with x distinct dates in it (x>=num)
 / @param datecol (DateList) date column
 / @param num (Long) number of days before today to consider
 / @return (FloatList) average number of entries per date where records for date exist
