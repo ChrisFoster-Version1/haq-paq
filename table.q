@@ -193,14 +193,31 @@
   (uj/) raze each tbls group cols each tbls
  };
 
-/ Save table to an integer partition db
+/ Creates an integer partition database to store a table on disk
 / @param path (String) directory path
 / @param partName (Symbol) partition name
 / @param tblName (Symbol) table name
 / @param tbl (Table) table to save to disk
-.tbl.saveAsIntPart:{[path;partName;tblName;tbl]
+.tbl.createIntPart:{[path;partName;tblName;tbl]
   .Q.ens[p:hsym`$path;;`intMap]([]id:(),partName);
   hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
+ };
+ 
+/ Saves or updates a table to an integer partition database.
+/ <br>Note you need to have a reference on intMap in memory otherwise will default to .tbl.createIntPart</br>
+/ @param path (String) directory path
+/ @param partName (Symbol) partition name
+/ @param tblName (Symbol) table name
+/ @param tbl (Table) table to save to disk
+/ @see .tbl.createIntPart
+.tbl.saveDataToIntPart:{[path;partName;tblName;tbl]
+   if[intMap in value"\\v";
+     if[tblName in intMap;
+	    tbl:.Q.en[p:hsym`$path;tbl];
+	    :hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]upsert tbl
+	   ];	 
+	];
+  .tbl.createIntPart[path;partName;tblName;tbl]
  };
 
 / Selectively ungroup a table by a subset of columns
