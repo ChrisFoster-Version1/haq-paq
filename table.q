@@ -8,7 +8,7 @@
 //                          Table Utilities                                 //
 
 
-/ Returns resolved table if a reference to a table is passed
+/ Return resolved table if a reference to a table is passed
 / @param tblOrSym (Table|Symbol) Table or reference to a table to resolve
 / @return (Table) Resolved table
 .tbl.resolve:{[tblOrSym]
@@ -24,7 +24,7 @@
   keys[tblOrSym]xkey ![res;();0b;enumCols!value ,/:enumCols]
  };
 
-/ Creating a pivot table dynamically 
+/ Create a pivot table dynamically 
 / @param tbl (Table) table 
 / @param g (Symbol) column to group by
 / @param c (Symbol) column to become the key of pivot table
@@ -116,7 +116,7 @@
   0<count keys tbl
  };
  
-/ Runs a comparison between 2 tables for the columns in those tables
+/ Run a comparison between 2 tables for the columns in those tables
 / <br>If the table is keyed will only consider the keyed columns </br>
 / @param f (Function) function to do comparison, example inter, except, etc
 / @param tbl1 (Table) table 
@@ -193,7 +193,7 @@
   (uj/) raze each tbls group cols each tbls
  };
 
-/ Creates an integer partition database to store a table on disk
+/ Create an integer partition database to store a table on disk
 / @param path (String) directory path
 / @param partName (Symbol) partition name
 / @param tblName (Symbol) table name
@@ -203,7 +203,7 @@
   hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
  };
  
-/ Saves or updates a table to an integer partition database.
+/ Save or updates a table to an integer partition database.
 / <br>Note you need to have a reference on intMap in memory otherwise will default to .tbl.createIntPart</br>
 / @param path (String) directory path
 / @param partName (Symbol) partition name
