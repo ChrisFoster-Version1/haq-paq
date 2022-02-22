@@ -8,7 +8,7 @@
 //                          Misc Utilities                                  //
 
 
-/ Set up a dictionary without a specified type
+/ create generically-typed version of a given dictionary
 / @param dict (Dict) Dictionary
 / @return (Dict) Dictionary of non-specified type
 .misc.makeDictGenType:{[dict]
