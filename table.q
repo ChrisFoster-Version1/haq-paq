@@ -71,11 +71,11 @@
 / @param gt (Symbol) Global table
 / @param lt (Symbol) Linked table
 / @return (Symbol) name of updated table.
-/ @see .tbl.llink
+/ @see .tbl.link
 .tbl.relink:{[tbl;gt;lt]
   ky:keys tbl;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key tbl);
-  gt upsert .tbl.llink[tbl;lt]
+  gt upsert .tbl.link[tbl;lt]
  };
 
 / Check which tables are linked to the input 
