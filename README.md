@@ -9,7 +9,7 @@ This package includes prime number calculation, list creation functions similar 
 ## Chrono Library
 Has a variety of useful functions to assist when working with dates or timestamps in q.
 This package includes getting start/end dates of a week/month, returning only weekdays from a range
-of dates or converting timestamps between unix and q .
+of dates or converting timestamps between Unix and q .
 
 ## Format Library
 Useful for formatting information into strings, such as making numbers human readable,
