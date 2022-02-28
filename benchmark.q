@@ -13,7 +13,7 @@
 / @param args (List) Function input(s) as a list
 .bench.logBench:{[func;args]
   //`BenchRunTime insert
-  `.bench.BenchRunTime upsert`runtime`fn`args`time`space!.z.p,func,(`$.Q.s1[args]),first .Q.ts[func;args]
+  `.bench.BenchRunTime upsert`runtime`function`args`time`space!.z.p,func,(`$.Q.s1[args]),first .Q.ts[func;args]
  };
 
 / Table for tracking function runtimes
