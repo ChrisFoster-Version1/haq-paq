@@ -70,7 +70,7 @@
 / @param seconds (Long) Second-based Unix timestamp
 / @return (Timestamp) kdb timestamp
 .chrono.unixToQ:{[seconds]
-  :"p"$("j"$1970.01.01D00:00)+unix*1e9;
+  :"p"$("j"$1970.01.01D00:00)+seconds*1e9;
  };
 
 / Convert kdb timestamp to second-based Unix timestamp (equivalent to date +%s)
