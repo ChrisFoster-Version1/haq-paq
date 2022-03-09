@@ -109,9 +109,9 @@
 / Return the num-th prime number
 / @param num (Long) number
 / @return (Long) the num-th prime number
-/ @see .maths.returnXPrime
+/ @see .maths.getXPrimes
 .maths.nthPrime:{[num]
-  last .maths.returnXPrime num
+  last .maths.getXPrimes num
  };
 
 / Return the first num prime numbers
