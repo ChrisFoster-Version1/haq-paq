@@ -163,33 +163,6 @@
   {y^x y}[dict;cols tbl] xcol tbl
  };
 
-/ Integer-partitioned database disk space stats
-/ @param path (String) directory path of hdb
-/ @param tblName (Symbol) table name
-/ @return (Table) Table of stats for disk space used for hdb
-.tbl.getIntDBSize:{[path;tblName]
-  name:"*",string[tblName],"*";
-  res1:system"du ",path," | awk '{ print $1\"|\"$2}'";
-  intList: get hsym`$path,"/intMap";
-  tbl:update name:intList int from
-        0!select first"J"$num_size by int:"I"$partition inter\: .Q.n from`num_size`partition!/:"|"vs/:res1 where not partition like name,not partition~\:enlist"*",not partition~\:path;
-  res2:system"ls -la ",path," | awk '{ print $5\"|\"$9}'";
-  tbl:tbl,0!select first"J"$num_size by`$name,int:0ni from(update name:name except\:(.Q.n,".")from`num_size`name!/:"|"vs/:res2)where not name ~\:"";
-  `name`int xkey update total:sum num_size from tbl
- };
-
-/ Date-partitioned database disk space stats
-/ @param path (String) directory path of hdb
-/ @return (Table) Table of stats for disk space used for hdb
-.tbl.getDateDBSize:{[path]
-  res1:system"du ",path," | awk '{ print $1\"|\"$2}'";
-  res1:update date:"D"$(1+count path)_/:partition from `num_size`partition!/:"|"vs/:res1;
-  tbl:0!select first"J"$num_size,name:` by date from res1 where not null date;
-  res2:system"ls -la ",path," | awk '{ print $5\"|\"$9}'";
-  tbl:tbl,0!select first"J"$num_size by`$name,date:0nd from(update name:name except\:(.Q.n,".")from`num_size`name!/:"|"vs/:res2)where not name ~\:"";
-  `name`date xkey update total:sum num_size from tbl
- };
-
 / Efficiently union join over a given list of tables
 / @param tbls (List) list of tables to union join together
 / @return (Table) Result of appling union join over tbls input 
