@@ -177,7 +177,7 @@
 / @param tbl (Table) table to save to disk
 .tbl.createIntPart:{[path;partName;tblName;tbl]
   .Q.ens[p:hsym`$path;;`intMap]([]id:(),partName);
-  hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
+  hsym[`$path,"/",raze[string intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
  };
  
 / Save or updates a table to an integer partition database.
@@ -191,7 +191,7 @@
    if[intMap in value"\\v";
      if[tblName in intMap;
 	    tbl:.Q.en[p:hsym`$path;tbl];
-	    :hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]upsert tbl
+	    :hsym[`$path,"/",raze[string intMap?partName],"/",string[tblName],"/"]upsert tbl
 	   ];	 
 	];
   .tbl.createIntPart[path;partName;tblName;tbl]
