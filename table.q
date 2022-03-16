@@ -166,7 +166,7 @@
 / Integer-partitioned database disk space stats
 / @param tblName (Symbol) table name
 / @return (Table) Table of stats for disk space used for hdb
-.tbl.getIntDBSize:{[tblName]
+.tbl.getIntDBSize:{[path;tblName]
   name:"*",tblName,"*";
   res1:system"du | awk '{ print $1\"|\"$2}'";
   tbl:update name:intMap int from
@@ -178,10 +178,10 @@
 
 / Date-partitioned database disk space stats
 / @return (Table) Table of stats for disk space used for hdb
-.tbl.getDateDBSize:{[]
-  res1:system"du | awk '{ print $1\"|\"$2}'";
+.tbl.getDateDBSize:{[path]
+  res1:system"du ",path," | awk '{ print $1\"|\"$2}'";
   tbl:update name:` from 0!select first"J"$num_size by date:"D"$2_/:partition from`num_size`partition!/:"|"vs/:res1 where 1=count each group'[partition]@\:"/";
-  res2:system"ls -la | awk '{ print $5\"|\"$9}'";
+  res2:system"ls -la ",path," | awk '{ print $5\"|\"$9}'";
   tbl:tbl,0!select first"J"$num_size by`$name,date:0nd from(update name:name except\:(.Q.n,".")from`num_size`partition!/:"|"vs/:res2)where not name ~\:"";
   `name`date xkey update total:sum num_size from tbl
  };
@@ -193,14 +193,31 @@
   (uj/) raze each tbls group cols each tbls
  };
 
-/ Save table to an integer partition db
+/ Creates an integer partition database to store a table on disk
 / @param path (String) directory path
 / @param partName (Symbol) partition name
 / @param tblName (Symbol) table name
 / @param tbl (Table) table to save to disk
-.tbl.saveAsIntPart:{[path;partName;tblName;tbl]
+.tbl.createIntPart:{[path;partName;tblName;tbl]
   .Q.ens[p:hsym`$path;;`intMap]([]id:(),partName);
-  hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
+  hsym[`$path,"/",raze[string intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
+ };
+ 
+/ Saves or updates a table to an integer partition database.
+/ <br>Note you need to have a reference on intMap in memory otherwise will default to .tbl.createIntPart</br>
+/ @param path (String) directory path
+/ @param partName (Symbol) partition name
+/ @param tblName (Symbol) table name
+/ @param tbl (Table) table to save to disk
+/ @see .tbl.createIntPart
+.tbl.saveDataToIntPart:{[path;partName;tblName;tbl]
+   if[intMap in value"\\v";
+     if[tblName in intMap;
+	    tbl:.Q.en[p:hsym`$path;tbl];
+	    :hsym[`$path,"/",raze[string intMap?partName],"/",string[tblName],"/"]upsert tbl
+	   ];	 
+	];
+  .tbl.createIntPart[path;partName;tblName;tbl]
  };
 
 / Selectively ungroup a table by a subset of columns
