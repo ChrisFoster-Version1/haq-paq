@@ -7,7 +7,11 @@
 
 //                          Mathematics Utilities                           //
 
+<<<<<<< HEAD
 / Get an num-day average count
+=======
+/ Get an num-day average count for a table with x distinct dates in it (x>=num)
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / @param datecol (DateList) date column
 / @param num (Long) number of days before today to consider
 / @return (FloatList) average number of entries per date where records for date exist
@@ -109,9 +113,15 @@
 / Return the num-th prime number
 / @param num (Long) number
 / @return (Long) the num-th prime number
+<<<<<<< HEAD
 / @see .maths.returnXPrime
 .maths.nthPrime:{[num]
   last .maths.returnXPrime num
+=======
+/ @see .maths.getXPrimes
+.maths.nthPrime:{[num]
+  last .maths.getXPrimes num
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
  };
 
 / Return the first num prime numbers

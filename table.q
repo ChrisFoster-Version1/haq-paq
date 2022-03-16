@@ -8,7 +8,11 @@
 //                          Table Utilities                                 //
 
 
+<<<<<<< HEAD
 / Returns resolved table if a reference to a table is passed
+=======
+/ Return resolved table if a reference to a table is passed
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / @param tblOrSym (Table|Symbol) Table or reference to a table to resolve
 / @return (Table) Resolved table
 .tbl.resolve:{[tblOrSym]
@@ -24,7 +28,11 @@
   keys[tblOrSym]xkey ![res;();0b;enumCols!value ,/:enumCols]
  };
 
+<<<<<<< HEAD
 / Creating a pivot table dynamically 
+=======
+/ Create a pivot table dynamically 
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / @param tbl (Table) table 
 / @param g (Symbol) column to group by
 / @param c (Symbol) column to become the key of pivot table
@@ -71,11 +79,19 @@
 / @param gt (Symbol) Global table
 / @param lt (Symbol) Linked table
 / @return (Symbol) name of updated table.
+<<<<<<< HEAD
 / @see .tbl.llink
 .tbl.relink:{[tbl;gt;lt]
   ky:keys tbl;
   tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key tbl);
   gt upsert .tbl.llink[tbl;lt]
+=======
+/ @see .tbl.link
+.tbl.relink:{[tbl;gt;lt]
+  ky:keys tbl;
+  tbl:?[gt;;0b;()]enlist(in;(flip;(!;enlist ky;enlist,ky));key tbl);
+  gt upsert .tbl.link[tbl;lt]
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
  };
 
 / Check which tables are linked to the input 
@@ -116,7 +132,11 @@
   0<count keys tbl
  };
  
+<<<<<<< HEAD
 / Runs a comparison between 2 tables for the columns in those tables
+=======
+/ Run a comparison between 2 tables for the columns in those tables
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / <br>If the table is keyed will only consider the keyed columns </br>
 / @param f (Function) function to do comparison, example inter, except, etc
 / @param tbl1 (Table) table 
@@ -163,6 +183,7 @@
   {y^x y}[dict;cols tbl] xcol tbl
  };
 
+<<<<<<< HEAD
 / Integer-partitioned database disk space stats
 / @param tblName (Symbol) table name
 / @return (Table) Table of stats for disk space used for hdb
@@ -186,6 +207,8 @@
   `name`date xkey update total:sum num_size from tbl
  };
 
+=======
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / Efficiently union join over a given list of tables
 / @param tbls (List) list of tables to union join together
 / @return (Table) Result of appling union join over tbls input 
@@ -193,17 +216,28 @@
   (uj/) raze each tbls group cols each tbls
  };
 
+<<<<<<< HEAD
 / Creates an integer partition database to store a table on disk
+=======
+/ Create an integer partition database to store a table on disk
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / @param path (String) directory path
 / @param partName (Symbol) partition name
 / @param tblName (Symbol) table name
 / @param tbl (Table) table to save to disk
 .tbl.createIntPart:{[path;partName;tblName;tbl]
   .Q.ens[p:hsym`$path;;`intMap]([]id:(),partName);
+<<<<<<< HEAD
   hsym[`$path,"/",raze[string intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
  };
  
 / Saves or updates a table to an integer partition database.
+=======
+  hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]set .Q.en[p;tbl];
+ };
+ 
+/ Save or updates a table to an integer partition database.
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 / <br>Note you need to have a reference on intMap in memory otherwise will default to .tbl.createIntPart</br>
 / @param path (String) directory path
 / @param partName (Symbol) partition name
@@ -214,7 +248,11 @@
    if[intMap in value"\\v";
      if[tblName in intMap;
 	    tbl:.Q.en[p:hsym`$path;tbl];
+<<<<<<< HEAD
 	    :hsym[`$path,"/",raze[string intMap?partName],"/",string[tblName],"/"]upsert tbl
+=======
+	    :hsym[`$path,"/",string[intMap?partName],"/",string[tblName],"/"]upsert tbl
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 	   ];	 
 	];
   .tbl.createIntPart[path;partName;tblName;tbl]

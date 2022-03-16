@@ -13,7 +13,11 @@
 / @param args (List) Function input(s) as a list
 .bench.logBench:{[func;args]
   //`BenchRunTime insert
+<<<<<<< HEAD
   `.bench.BenchRunTime upsert`runtime`fn`args`time`space!.z.p,func,(`$.Q.s1[args]),first .Q.ts[func;args]
+=======
+  `.bench.BenchRunTime upsert`runtime`function`args`time`space!.z.p,func,(`$.Q.s1[args]),first .Q.ts[func;args]
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
  };
 
 / Table for tracking function runtimes
@@ -23,7 +27,11 @@
 
 / Basic upsert which records the time when a section of a function was executed
 / @param func (Symbol) Function name
+<<<<<<< HEAD
 / @param sect (Symbol) Section of function
+=======
+/ @param sect (Symbol) Section of function (some symbol name identifier to identify function section)
+>>>>>>> 6a144ce7df097ede9b48eae78c06115aa895e6ca
 .bench.logStep:{[func;sect]
   `.bench.BenchEachStep upsert (func;sect;.z.P)
  };
