@@ -129,7 +129,7 @@
 / @param num (Long) number
 / @return (LongList) all prime numbers less than num
 .maths.listPrimes:{[num]
-  {x except 1_x where 0=x mod x y}/[2_til num;til num]
+  {x except 1_x where 0=x mod x y}/[2_til num;til "j"$sqrt num]
  };
 
 / Replicate pandas.DataFrame to a limited degree
