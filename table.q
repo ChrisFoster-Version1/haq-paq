@@ -231,21 +231,21 @@
 / <br> the paths to the individual columns of a table if splayed or
 / <br> the path to the table if it is a flat file
 / @param dir (Symbol) directory path
-/ @param tableName (Symbol) table in dir that we want to expand the contents of
-/ @return (SymbolList) One of Path to the table (if a flat file), paths to table columns (if splayed), empty list if no match found for tableName
-.tbl.returnOnDiskContents:{[dir;tableName]
+/ @param tblName (Symbol) table in dir that we want to expand the contents of
+/ @return (SymbolList) One of Path to the table (if a flat file), paths to table columns (if splayed), empty list if no match found for tblName
+.tbl.getOnDiskContents:{[dir;tblName]
   dir:hsym dir;
-  k:key dir;
-  if[not any raze tableName=` vs/:k;
+  k:(),key dir;
+  if[not (tblName in ` vs dir) or any raze tblName=` vs/:k;
     :`$()
   ];
   if[dir ~ k;
     :k
   ];
-  if[tableName in k;
-    :{` sv/:x,/:key x}[` sv dir,tableName]
+  if[tblName in k;
+    :{$[x~key x;(),x;` sv/:x,/:key x]}[` sv dir,tblName]
   ];
-  if[tableName in ` vs dir;
+  if[tblName in ` vs dir;
     :` sv/:dir,/:k
   ];
   `$()
@@ -253,15 +253,15 @@
 
 / Get the size of tables on disk
 / @param path (Symbol) path to hdb
-/ @param tableName (Symbol) table name
+/ @param tblName (Symbol) table name
 / @return (Table) Size of table under each partition
 / @see .tbl.getFileSizeOnDisk
 / @see .tbl.getTopLevelDBContents
-/ @see .tbl.returnOnDiskContents
-.tbl.getTableSizeOnDisk:{[hdbDir;tableName]
+/ @see .tbl.getOnDiskContents
+.tbl.getTableSizeOnDisk:{[hdbDir;tblName]
   if[not count key hdbDir;'"hdb not populated"];
   dbContents:.tbl.getTopLevelDBContents[hdbDir];
-  files:.tbl.returnOnDiskContents[;tableName] each dbContents;
+  files:.tbl.getOnDiskContents[;tblName] each dbContents;
   w:where 0<count each files;
   partitionType:"DMJJ"[10 7 4?count string last ` vs first dbContents];
   files:files[w];
@@ -270,19 +270,19 @@
   ([]
     path:first each dbContentsSplit;
     part:partitionType$string last each dbContentsSplit;
-    tableName;
-    diskUsageBytes:sizes
+    tblName;
+    fileSizeBytes:sizes
   )
  };
 
-/ Get a breakdown of the total DB size
+/ Get a breakdown of the total DB size on a per-file basis
 / @param path (Symbol) path to hdb
 / @return (Table) Size of each entity below the given directory
 / @see .tbl.getFileSizeOnDisk
 / @see .tbl.getTopLevelDBContents
-.tbl.getTotalDBSize:{[hdbDir]
+.tbl.getTotalDBSizeOnDiskByFile:{[hdbDir]
   if[not count key hdbDir;'"hdb not populated"];
   dbContents:.tbl.getTopLevelDBContents[hdbDir];
   allFiles:raze {if[x~k:key x;:(),x]; raze .z.s each ` sv/:x,/:k} each dbContents;
-  ([] path:allFiles; diskUsageBytes:sum each .tbl.getFileSizeOnDisk each allFiles)
+  ([] path:allFiles; fileSizeBytes:sum each .tbl.getFileSizeOnDisk each allFiles)
  };
