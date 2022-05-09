@@ -83,7 +83,7 @@
 / @return (SymbolList) list of tables that have the input linked to them
 .tbl.isLinked:{[tblName]
   where tables[]!{x in fkeys y}[tblName]each tables`
- }
+ };
 
 / Resave the splay table with all columns truncated to the length of the shortest one
 / <br> In the event of columns of a splay having different lengths </br>
