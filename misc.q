@@ -19,8 +19,6 @@
 / @param columns (SymbolList) Columns
 / @param booleans (BooleanList) Nested Boolean lists
 / @return (SymbolList) Columns
-// example: t:0!select side,v by id from([]id:5?`k`l`n;side:5?`b`s;v:5?100)
-//          select id,.ut.indexListColumns[v;side=`b]from t
 .misc.indexListColumns:{[columns;booleans]
   columns@'where each booleans
  };
