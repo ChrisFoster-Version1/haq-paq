@@ -12,7 +12,6 @@
 / @param func (Symbol) Function name
 / @param args (List) Function input(s) as a list
 .bench.logBench:{[func;args]
-  //`BenchRunTime insert
   `.bench.BenchRunTime upsert`runtime`function`args`time`space!.z.p,func,(`$.Q.s1[args]),first .Q.ts[func;args]
  };
 
