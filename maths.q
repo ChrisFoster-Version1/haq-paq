@@ -39,7 +39,6 @@
 / @param decplaces (Long) number of decimal places to round to
 / @param num (Float) number to round 
 / @return (Float) rounded number
-// example .maths.round[2;10.4534545]
 .maths.round:{[decplaces;num]
   %[;dv]`long$num*dv:10 xexp decplaces
  };
