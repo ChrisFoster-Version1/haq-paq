@@ -70,28 +70,28 @@
 / @param seconds (Long) Second-based Unix timestamp
 / @return (Timestamp) kdb timestamp
 .chrono.unixToQ:{[seconds]
-  :"p"$("j"$1970.01.01D00:00)+seconds*1e9;
+  "p"$("j"$1970.01.01D00:00)+seconds*1e9
  };
 
 / Convert kdb timestamp to second-based Unix timestamp (equivalent to date +%s)
 / @param timestamp (Timestamp) kdb timestamp
 / @return (Long) Second-based Unix timestamp
 .chrono.qToUnix:{[timestamp]
-  :floor(("j"$timestamp)-"j"$1970.01.01D00:00)%1e9;
+  floor(("j"$timestamp)-"j"$1970.01.01D00:00)%1e9
  };
 
 / Convert millisecond-based Unix timestamp to kdb timestamp
 / @param milliseconds (Long) Millisecond-based Unix timestamp
 / @return (Timestamp) kdb timestamp
 .chrono.unixToQMS:{[milliseconds]
-  :1970.01.01+0D00:00:00.001*milliseconds;
+  1970.01.01+0D00:00:00.001*milliseconds
  };
 
 / Convert kdb timestamp to millisecond-based Unix timestamp (equivalent to date +%s%3N)
 / @param timestamp (Timestamp) kdb timestamp
 / @return (Long) Millisecond-based Unix timestamp
 .chrono.qToUnixMS:{[timestamp]
-  :"j"$(timestamp-1970.01.01D0)%0D00:00:00.001;
+  "j"$(timestamp-1970.01.01D0)%0D00:00:00.001
  };
 
 / Modify date format.
