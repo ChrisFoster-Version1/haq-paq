@@ -34,7 +34,7 @@ Includes extra utility functions such as efficiently counting a sym file's lengt
 
 * Kyle Bonnes
 * Conor Swain
-* Sam Gallagher
+* Samantha Devlin
 * Chris Murphy
 * Michal Hasson
 * Chris Foster
