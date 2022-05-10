@@ -29,3 +29,16 @@ This ranges from fixing issues with splayed tables on disk to using integer part
 
 ## Miscellaneous library
 Includes extra utility functions such as efficiently counting a sym file's length and generically typed dictionary creation.
+
+## Contributors
+
+* Kyle Bonnes
+* Conor Swain
+* Sam Gallagher
+* Chris Murphy
+* Michal Hasson
+* Chris Foster
+* Sean Hehir
+* Carlos Sanchez
+* Brooke Hopley
+* Thomas Smyth
