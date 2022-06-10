@@ -2,7 +2,7 @@
 
 The haq-paq General Utilities Library from Version 1 allows developers to get a head start on writing many of the basic utility functions found across q codebases. The library is split across themed packages with each package existing as an independent, easily loadable q script.
 
-For documentation on how to use the functions, click [here]("https://Version1.github.io/haq-paq").
+For documentation on how to use the functions, open haq-paq.html in your internet browser.
 
 ## Maths Library
 Covers a wide range of functionality that is normally found in other packages for languages (such as Python's NumPy).
