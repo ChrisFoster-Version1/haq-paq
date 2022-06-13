@@ -4,6 +4,10 @@ The haq-paq General Utilities Library from Version 1 allows developers to get a 
 
 For documentation on how to use the functions, open haq-paq.html in your internet browser.
 
+## Unit Tests
+
+These libraries have been unit tested and the unit tests are stored in a private repository.
+
 ## Maths Library
 Covers a wide range of functionality that is normally found in other packages for languages (such as Python's NumPy).
 This package includes prime number calculation, list creation functions similar to those that exist in NumPy (such as linspace), calculating modal values and rounding functionality.
