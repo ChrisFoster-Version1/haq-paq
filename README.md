@@ -6,7 +6,7 @@ For documentation on how to use the functions, open haq-paq.html in your interne
 
 ## Unit Tests
 
-These libraries have been unit tested and the unit tests are stored in a private repository.
+These libraries (except the benchmark library) have unit tests which are stored in a private repository.
 
 ## Maths Library
 Covers a wide range of functionality that is normally found in other packages for languages (such as Python's NumPy).
